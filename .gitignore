@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.streamlit/secrets.toml
+.DS_Store
+
+# Real, non-anonymized source financials — never commit these.
+# Only the anonymized figures extracted into data_gen/financials.py are published.
+*.xlsx
+*.xlsm
+
+# Personal documents dropped into this folder for reference — not part of the
+# public portfolio repo.
+*Resume*.pdf
+*resume*.pdf
+*Interview*.md
