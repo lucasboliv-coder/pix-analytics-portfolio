@@ -109,5 +109,6 @@ with col4:
 
 st.markdown("---")
 st.caption(
-    "Stack: Streamlit + Plotly + pandas/numpy. Source code on GitHub — link to be added after deploy."
+    "Stack: Streamlit + Plotly + pandas/numpy. "
+    "[Source code on GitHub](https://github.com/lucasboliv-coder/pix-analytics-portfolio)."
 )
