@@ -13,6 +13,35 @@ data**.
 > inspired by panels I built professionally as a Data Analyst at a real
 > fintech, but rebuilt from scratch for this repository.
 
+## Preview
+
+![Blockchain & Bridge dashboard](docs/screenshots/blockchain.jpg)
+
+<table>
+  <tr>
+    <td><img src="docs/screenshots/pix-in-out.jpg" alt="PIX In/Out dashboard"></td>
+    <td><img src="docs/screenshots/users-and-ticket.jpg" alt="Active Users & Avg Ticket dashboard"></td>
+  </tr>
+  <tr>
+    <td colspan="2"><img src="docs/screenshots/financial-projections.jpg" alt="Financial Projections dashboard"></td>
+  </tr>
+</table>
+
+## What this project demonstrates
+
+- **End-to-end ownership** — synthetic data modeling, aggregation logic,
+  KPI design and dashboard UX, all in one repo with no external dependencies.
+- **Fintech domain knowledge** — PIX in/out flows, fees, transaction status,
+  crypto/bridge activity and average ticket, the metrics payment teams
+  actually track.
+- **Business-oriented analysis** — year-over-year comparisons, monthly
+  cohort-style matrices, value×fee correlation and multi-scenario financial
+  projections (revenue, cost, client growth).
+- **Reproducible, clean code** — deterministic generation from a fixed seed,
+  cached with `st.cache_data`, shared chart theme, modular structure.
+- **Data privacy awareness** — real-model figures are fictionalized and scaled
+  before publishing; source files never enter the repository.
+
 ## Dashboards
 
 - **👥 Users & Avg Ticket** — active users by PIX in/out, monthly matrix,
@@ -41,6 +70,7 @@ data**.
 - [Plotly](https://plotly.com/python/) — visualizations, with a shared
   palette and template (`theme/charts.py`)
 - pandas / numpy — synthetic data generation and aggregation
+- statsmodels — trend lines and regression overlays
 
 ## Running locally
 
@@ -54,7 +84,7 @@ streamlit run Home.py
 ```
 pix-analytics-portfolio/
 ├── Home.py                  # landing page
-├── pages/                   # the 3 dashboards
+├── pages/                   # the 4 dashboards
 ├── data_gen/
 │   ├── generator.py          # deterministic synthetic dataset generator (fixed seed)
 │   ├── names.py               # common BR names used only to give personas a realistic look
@@ -71,3 +101,13 @@ no need for a database or external files.
 ## Deploy
 
 Live on Streamlit Community Cloud: https://pix-analytics-portfolio.streamlit.app/
+
+## About the author
+
+**Lucas Bastos** — Data Analyst focused on ETL, data modeling and revenue
+analytics. First data hire at a crypto-payments fintech; previously in EdTech
+planning/forecasting and manufacturing BI.
+
+- 💼 [LinkedIn](https://www.linkedin.com/in/lucas-bastos-56756084/)
+- 🐙 [GitHub](https://github.com/lucasboliv-coder)
+- ✉️ [lucasboliv@gmail.com](mailto:lucasboliv@gmail.com)
