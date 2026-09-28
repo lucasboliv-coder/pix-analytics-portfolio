@@ -1,17 +1,17 @@
+import calendar
+
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 
 from data_gen.generator import END_DATE, START_DATE, load_data
-from theme.charts import COLOR_PIX_IN, COLOR_PIX_OUT, STATUS, apply_default_layout, register_template
-from theme.style import inject_css, kpi_grid, period_badge, section_header
+from theme.charts import COLOR_PIX_IN, COLOR_PIX_OUT, STATUS, apply_default_layout
+from theme.icons import ICON, mi
+from theme.narrative import yoy_story
+from theme.style import kpi_grid, period_badge, section_header
 
-st.set_page_config(page_title="PIX In/Out · PixFlow", layout="wide", page_icon="💸")
-inject_css()
-register_template()
-
-st.title("💸 PIX In / Out")
+st.title(f"{mi(ICON['pix_page'])} PIX In / Out")
 
 data = load_data()
 pix_in, pix_out = data["pix_in"].copy(), data["pix_out"].copy()
@@ -50,17 +50,22 @@ df = df_all if direction_sel == "Combined" else df_all[df_all["direction"] == di
 # ---------------------------------------------------------------------------
 kpi_grid(
     [
-        {"icon": "💰", "label": "Total volume", "value": f"R$ {df['amount_brl'].sum():,.0f}"},
-        {"icon": "🧾", "label": "Total fees", "value": f"R$ {df['fee_brl'].sum():,.0f}"},
-        {"icon": "🎯", "label": "Average ticket", "value": f"R$ {df['amount_brl'].mean():,.2f}" if len(df) else "R$ 0.00"},
-        {"icon": "🔢", "label": "Transactions", "value": f"{len(df):,}"},
+        {"icon": ICON["revenue"], "label": "Total volume", "value": f"R$ {df['amount_brl'].sum():,.0f}"},
+        {"icon": ICON["fees"], "label": "Total fees", "value": f"R$ {df['fee_brl'].sum():,.0f}"},
+        {"icon": ICON["avg_ticket"], "label": "Average ticket", "value": f"R$ {df['amount_brl'].mean():,.2f}" if len(df) else "R$ 0.00"},
+        {"icon": ICON["transactions"], "label": "Transactions", "value": f"{len(df):,}"},
     ]
 )
 
-tab1, tab2, tab3, tab4 = st.tabs(["📊 Overview", "📆 Time & Yearly", "🔎 Transactions", "🔗 Correlation"])
+tab1, tab2, tab3, tab4 = st.tabs([
+    f"{mi(ICON['overview'])} Overview",
+    f"{mi(ICON['calendar'])} Time & Yearly",
+    f"{mi(ICON['search'])} Transactions",
+    f"{mi(ICON['correlation'])} Correlation",
+])
 
 with tab1:
-    section_header("📊", "Volume by month")
+    section_header(ICON["overview"], "Volume by month")
     col1, col2 = st.columns(2)
     with col1:
         if direction_sel == "Combined":
@@ -87,35 +92,31 @@ with tab1:
         st.plotly_chart(fig2, use_container_width=True)
 
 with tab2:
-    section_header("📆", "Year-over-year comparison")
+    section_header(ICON["yoy"], "Year-over-year comparison")
     years = sorted(df["year"].unique())
     pivot = df.groupby(["month_num", "year"])["amount_brl"].sum().unstack(fill_value=0)
     fig3 = go.Figure()
     for year in pivot.columns:
         fig3.add_trace(go.Scatter(x=pivot.index, y=pivot[year], name=str(year), mode="lines+markers"))
     apply_default_layout(fig3, title="Monthly volume by year", height=380)
-    fig3.update_layout(xaxis=dict(tickmode="array", tickvals=list(range(1, 13))))
+    fig3.update_layout(xaxis=dict(
+        tickmode="array", tickvals=list(range(1, 13)),
+        ticktext=[calendar.month_abbr[m] for m in range(1, 13)],
+    ))
     st.plotly_chart(fig3, use_container_width=True)
 
     if len(years) >= 2:
         y_prev, y_curr = years[-2], years[-1]
-        pivot["Difference"] = pivot[y_curr] - pivot[y_prev]
-        pivot["Difference %"] = (pivot["Difference"] / pivot[y_prev].replace(0, 1) * 100).round(2)
-        st.dataframe(
-            pivot.reset_index().rename(columns={"month_num": "Month"}).style.format(
-                {y_prev: "R$ {:,.0f}", y_curr: "R$ {:,.0f}", "Difference": "R$ {:+,.0f}", "Difference %": "{:+.1f}%"}
-            ),
-            use_container_width=True,
-        )
+        st.markdown(yoy_story(pivot[y_prev], pivot[y_curr], y_prev, y_curr, lambda v: f"R$ {v:,.0f}"))
 
 with tab3:
-    section_header("🔎", "High-value transactions")
+    section_header(ICON["search"], "High-value transactions")
     high_value = df[df["amount_brl"] > df["amount_brl"].quantile(0.97)]
     st.dataframe(high_value[["user_id", "direction", "amount_brl", "fee_brl", "status", "created_at"]]
                  .sort_values("amount_brl", ascending=False).head(50), use_container_width=True)
 
 with tab4:
-    section_header("🔗", "Amount × Fee")
+    section_header(ICON["correlation"], "Amount × Fee")
     fig4 = px.scatter(df.sample(min(len(df), 3000), random_state=42), x="amount_brl", y="fee_brl",
                       trendline="ols", opacity=0.5,
                       labels={"amount_brl": "Amount (R$)", "fee_brl": "Fee (R$)"})
