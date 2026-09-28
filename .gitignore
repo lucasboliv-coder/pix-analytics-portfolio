@@ -16,3 +16,7 @@ venv/
 *resume*.pdf
 *Interview*.md
 LinkedIn_Post_Draft.md
+
+# ...except the one copy meant to be public: linked from the app's Home page
+# and from the README's "About the author" section.
+!docs/Lucas_Bastos_Resume.pdf
