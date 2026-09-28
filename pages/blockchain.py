@@ -3,14 +3,11 @@ import plotly.graph_objects as go
 import streamlit as st
 
 from data_gen.generator import END_DATE, START_DATE, load_data
-from theme.charts import COLOR_BLOCKCHAIN, COLOR_BRIDGE, SYMBOL_COLORS, STATUS, apply_default_layout, register_template
-from theme.style import inject_css, kpi_grid, period_badge, section_header
+from theme.charts import COLOR_BLOCKCHAIN, COLOR_BRIDGE, SYMBOL_COLORS, STATUS, apply_default_layout
+from theme.icons import ICON, mi
+from theme.style import kpi_grid, period_badge, section_header
 
-st.set_page_config(page_title="Blockchain · PixFlow", layout="wide", page_icon="🔗")
-inject_css()
-register_template()
-
-st.title("🔗 Blockchain & Bridge")
+st.title(f"{mi(ICON['chain_page'])} Blockchain & Bridge")
 
 data = load_data()
 chain = data["chain"].copy()
@@ -44,17 +41,22 @@ period_badge(f"{start:%m/%d/%Y} — {end:%m/%d/%Y}")
 
 kpi_grid(
     [
-        {"icon": "💠", "label": "Total value", "value": f"{df['value'].sum():,.0f}"},
-        {"icon": "🧮", "label": "Average value", "value": f"{df['value'].mean():,.2f}" if len(df) else "0.00"},
-        {"icon": "⛽", "label": "Total fee", "value": f"{df['tx_fee'].sum():,.2f}"},
-        {"icon": "🔢", "label": "Transactions", "value": f"{len(df):,}"},
+        {"icon": ICON["value"], "label": "Total value", "value": f"{df['value'].sum():,.0f}"},
+        {"icon": ICON["average"], "label": "Average value", "value": f"{df['value'].mean():,.2f}" if len(df) else "0.00"},
+        {"icon": ICON["gas_fee"], "label": "Total fee", "value": f"{df['tx_fee'].sum():,.2f}"},
+        {"icon": ICON["transactions"], "label": "Transactions", "value": f"{len(df):,}"},
     ]
 )
 
-tab1, tab2, tab3, tab4 = st.tabs(["📊 Overview", "🔄 Year-over-Year", "🧪 Status & Correlation", "📋 Data"])
+tab1, tab2, tab3, tab4 = st.tabs([
+    f"{mi(ICON['overview'])} Overview",
+    f"{mi(ICON['yoy'])} Year-over-Year",
+    f"{mi(ICON['status'])} Status & Correlation",
+    f"{mi(ICON['data'])} Data",
+])
 
 with tab1:
-    section_header("📊", "Monthly volume — Blockchain vs Bridge")
+    section_header(ICON["overview"], "Monthly volume — Blockchain vs Bridge")
     monthly = df.groupby(["month", "type"])["value"].sum().reset_index()
     monthly["month"] = monthly["month"].astype(str)
     fig = px.bar(monthly, x="month", y="value", color="type", barmode="group",
@@ -63,7 +65,7 @@ with tab1:
     apply_default_layout(fig)
     st.plotly_chart(fig, use_container_width=True)
 
-    section_header("🪙", "Volume by symbol")
+    section_header(ICON["symbol"], "Volume by symbol")
     by_symbol = df.groupby("symbol")["value"].sum().reset_index().sort_values("value", ascending=False)
     fig_s = px.bar(by_symbol, x="symbol", y="value", color="symbol",
                    color_discrete_map=SYMBOL_COLORS, labels={"value": "Value", "symbol": "Symbol"})
@@ -72,7 +74,7 @@ with tab1:
     st.plotly_chart(fig_s, use_container_width=True)
 
 with tab2:
-    section_header("🔄", "Year-over-year comparison — value by type")
+    section_header(ICON["yoy"], "Year-over-year comparison — value by type")
     for tx_type in ("BLOCKCHAIN", "BRIDGE"):
         sub = df[df["type"] == tx_type]
         if sub.empty:
@@ -88,7 +90,7 @@ with tab2:
 with tab3:
     col1, col2 = st.columns(2)
     with col1:
-        section_header("🧪", "Status distribution")
+        section_header(ICON["status"], "Status distribution")
         status_counts = df["status"].value_counts().reset_index()
         status_counts.columns = ["Status", "Count"]
         fig3 = px.pie(status_counts, values="Count", names="Status", hole=0.55,
@@ -96,7 +98,7 @@ with tab3:
         apply_default_layout(fig3, height=320)
         st.plotly_chart(fig3, use_container_width=True)
     with col2:
-        section_header("🔗", "Value × Fee")
+        section_header(ICON["correlation"], "Value × Fee")
         sample = df.sample(min(len(df), 3000), random_state=42) if len(df) else df
         fig4 = px.scatter(sample, x="value", y="tx_fee", trendline="ols", opacity=0.5,
                           labels={"value": "Value", "tx_fee": "Fee"})
@@ -105,7 +107,7 @@ with tab3:
         st.plotly_chart(fig4, use_container_width=True)
 
 with tab4:
-    section_header("📋", "Raw data (sample)")
+    section_header(ICON["data"], "Raw data (sample)")
     display_df = df.copy()
     display_df["tx_hash"] = display_df["tx_hash"].str[:18] + "..."
     st.dataframe(display_df.head(300), use_container_width=True)
