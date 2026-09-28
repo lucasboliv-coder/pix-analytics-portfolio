@@ -1,0 +1,11 @@
+# Binary assets — never run line-ending (LF/CRLF) conversion on these.
+# Git's autocrlf heuristic guesses "binary" from a NUL byte in the first
+# ~8000 bytes; a small, mostly-text-structured PDF like the resume can slip
+# past that check and get silently corrupted on checkout. Being explicit
+# here removes the guesswork for every binary type the repo actually has.
+*.pdf binary
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.xlsx binary
+*.xlsm binary
