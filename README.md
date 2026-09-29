@@ -1,10 +1,11 @@
 # PixFlow Analytics
 
 **Data Analyst** portfolio project: a set of interactive Streamlit dashboards
-for a fictional PIX and crypto payments fintech. Users and PIX run on
-**synthetic data**; Financial Projections runs on **real data,
-mathematically masked**; Blockchain combines a masked real on-chain snapshot
-with a synthetic history calibrated to it — see the disclaimers below.
+for a fictional PIX and crypto payments fintech. Each product dashboard
+(Users, PIX, Blockchain) opens with **real operating data, mathematically
+masked**, followed by a **synthetic** transaction-level history; Financial
+Projections runs on **real financial models, masked** — see the disclaimers
+below.
 
 **[Live demo](https://pix-analytics-portfolio.streamlit.app/)** — hosted on
 Streamlit Community Cloud's free tier, which sleeps after a period of
@@ -49,10 +50,13 @@ instant after that.
 
 ## Dashboards
 
-- **Users & Avg Ticket** — active users by PIX in/out, monthly matrix,
-  year-over-year comparison and average ticket trend.
-- **PIX Traded** — volume, fees, status distribution and value×fee
-  correlation for incoming and outgoing PIX transactions.
+- **Users & Avg Ticket** — opens with **real data, masked**: active users
+  (2024-2025), the sign-up → KYC funnel and the in/out average ticket, in
+  US$. Below it, synthetic monthly matrix, year-over-year and ticket views.
+- **PIX Traded** — opens with **real data, masked**: fiat volume and
+  transactions (2024-2025, US$), rail mix and take rate by rail (PIX, boleto,
+  ATM) and the weekday pattern. Below it, synthetic direction, status and
+  value×fee views.
 - **Blockchain & Bridge** — opens with **real on-chain data, masked**:
   monthly bridge volume and take rate, plus a route/direction/symbol/success
   snapshot, in US$. Below it, a synthetic transaction-level history
@@ -60,7 +64,8 @@ instant after that.
   snapshot, with year-over-year comparison and status analysis.
 - **Financial Projections** — revenue, cost and client-growth projections
   through 2029 across 3 scenarios (Conservative/Pessimistic/Optimistic), for
-  the group's two companies. **Not synthetic** — see the disclaimer below.
+  the group's two companies, plus a first plan-vs-actual check. **Not
+  synthetic** — see the disclaimer below.
 
 > **A second disclaimer, specific to this one:** the Financial Projections
 > dashboard is real data, mathematically masked — derived from real
@@ -74,10 +79,11 @@ instant after that.
 > The source spreadsheets
 > themselves are never committed to this repository (see `.gitignore`).
 >
-> The same approach covers the real block on the Blockchain page
-> (`data_gen/chain_real.py`): only monthly aggregates leave the source —
-> no addresses, hashes or user data — with volumes and counts masked and
-> percentages (take rate, shares, success rates) kept real.
+> The same approach covers the real blocks on the Users, PIX and Blockchain
+> pages (`data_gen/fiat_real.py`, `data_gen/chain_real.py`): only monthly
+> aggregates leave the source — no names, addresses, hashes or user-level
+> data — with counts and dollar amounts masked and percentages (growth,
+> shares, conversion and take rates) kept real.
 
 ## Stack
 
@@ -106,6 +112,8 @@ pix-analytics-portfolio/
 │   ├── generator.py          # deterministic synthetic dataset generator (fixed seed)
 │   ├── names.py               # common BR names used only to give personas a realistic look
 │   ├── chain_real.py          # masked real on-chain monthly aggregates (see disclaimer above)
+│   ├── fiat_real.py           # masked real user and fiat-rail monthly aggregates
+│   ├── plan_vs_actual.py      # realized ÷ projected ratios (first out-of-sample check)
 │   └── financials.py          # anonymized real financial KPIs (see disclaimer above)
 └── theme/
     ├── style.py               # CSS (glassmorphism) + KPI card components

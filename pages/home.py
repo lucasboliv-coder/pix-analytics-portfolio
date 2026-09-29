@@ -14,10 +14,10 @@ with col_bio:
         "dashboards for PIX, crypto and banking transactions from the ground up; previously in "
         "EdTech planning/forecasting and manufacturing BI. This app is a portfolio piece built to "
         "showcase that kind of work end-to-end — data generation, modeling, and dashboard design. "
-        "The product dashboards (Users, PIX, Blockchain) run on synthetic data, generated algorithmically "
-        "with scale and growth curves checked against real usage numbers I have access to professionally; "
-        "Blockchain also opens with a block of real on-chain data, and Financial Projections runs on real "
-        "financial data — both mathematically masked before publishing (see the disclaimer below)."
+        "Each product dashboard (Users, PIX, Blockchain) opens with a block of real operating data, "
+        "mathematically masked, followed by a synthetic transaction-level history calibrated to it; "
+        "Financial Projections runs on real financial models, masked the same way (see the disclaimer "
+        "below)."
     )
 with col_links:
     st.link_button(
@@ -38,23 +38,20 @@ st.markdown(
 )
 
 st.info(
-    "**Two different kinds of \"not real\" on this page — worth telling apart.** "
-    "Users, PIX and Blockchain are synthetic: generated algorithmically "
-    "(`data_gen/generator.py`, fixed seed) — the growth curves, weekly "
-    "seasonality and overall scale were checked against real usage numbers "
-    "I have access to professionally. PixFlow itself is a fictional brand "
-    "created for this portfolio. "
+    "**Two different kinds of \"not real\" in this app — worth telling apart.** "
+    "The transaction-level views on Users, PIX and Blockchain are synthetic: "
+    "generated algorithmically (`data_gen/generator.py`, fixed seed). PixFlow "
+    "itself is a fictional brand created for this portfolio. "
+    "**Each of those pages opens with a block of real data** — monthly "
+    "aggregates only, with counts and dollar amounts masked and growth "
+    "rates, shares and conversion rates kept real. "
     "**Financial Projections** is different: it's real data. Company names "
     "are fictionalized, and every figure has been run through a random, "
     "per-company mathematical operation — generated once and never recorded, "
     "including by me — before publishing. Growth rates and cost/revenue "
     "ratios closely track the real model (aside from rounding); the absolute "
     "numbers can't be reverse-engineered from what's published. See that "
-    "page for details. "
-    "**Blockchain** mixes both: its top block is real on-chain data (monthly "
-    "aggregates only, masked the same way — take rate, shares and success "
-    "rates are the real ones), and the synthetic history below it is "
-    "calibrated to that block.",
+    "page for details.",
     icon=mi(ICON["lock"]),
 )
 
@@ -86,22 +83,22 @@ col1, col2, col3, col4 = st.columns(4)
 with col1:
     st.markdown(f"#### {mi(ICON['users_page'])} Users & Avg Ticket")
     st.markdown(
-        "Active user growth, monthly/yearly matrix and average ticket "
-        "trend by direction (in/out)."
+        "Active user growth, sign-up → KYC funnel and average ticket "
+        "by direction. *(real data, masked + synthetic history)*"
     )
     st.page_link("pages/users_and_ticket.py", label="Open dashboard", icon=mi(ICON["users_page"]))
 with col2:
     st.markdown(f"#### {mi(ICON['pix_page'])} PIX Traded")
     st.markdown(
-        "Volume, fees, status and value×fee correlation for incoming and "
-        "outgoing PIX transactions."
+        "Fiat volume, rail mix and take rates, weekday pattern, plus status "
+        "and value×fee views. *(real data, masked + synthetic history)*"
     )
     st.page_link("pages/pix_in_out.py", label="Open dashboard", icon=mi(ICON["pix_page"]))
 with col3:
     st.markdown(f"#### {mi(ICON['chain_page'])} Blockchain")
     st.markdown(
         "On-chain and bridge activity, by symbol, with year-over-year "
-        "comparison and status analysis. *(real snapshot, masked + calibrated synthetic history)*"
+        "comparison and status analysis. *(real data, masked + synthetic history)*"
     )
     st.page_link("pages/blockchain.py", label="Open dashboard", icon=mi(ICON["chain_page"]))
 with col4:

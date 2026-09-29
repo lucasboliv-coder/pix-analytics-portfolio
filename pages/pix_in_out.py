@@ -5,6 +5,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 
+from data_gen.fiat_real import FIAT_MONTHLY, METHOD_MIX_2025, SEP_2025, USERS_MONTHLY
 from data_gen.generator import END_DATE, START_DATE, load_data
 from theme.charts import COLOR_PIX_IN, COLOR_PIX_OUT, STATUS, apply_default_layout
 from theme.icons import ICON, mi
@@ -40,6 +41,170 @@ df_all["month"] = df_all["created_at"].dt.to_period("M")
 df_all["year"] = df_all["created_at"].dt.year
 df_all["month_num"] = df_all["created_at"].dt.month
 
+# ===========================================================================
+# Real data (masked) — independent of the sidebar filters.
+# ===========================================================================
+section_header(ICON["lock"], "Real data — masked")
+st.markdown(
+    "Aggregated from the real records of the group's crypto-payments company. Counts and dollar "
+    "amounts are masked (see Home); **growth rates, shares and take rates are the real ones**. Values "
+    "in US\\$. The sidebar filters don't apply to this block."
+)
+st.markdown(
+    "**How to read it.** Every crypto purchase or sale starts or ends in BRL, and the BRL leg runs on "
+    "one of three **fiat rails**: **PIX** (Brazil's instant payment system, 24/7), **boleto** (a "
+    "bank slip that settles in a day or two) and **ATM** cash. The platform charges a fee on that leg, "
+    "so its fiat revenue is simply *volume × take rate* on each rail. The block looks at how volume "
+    "grew, where it runs, what each rail earns, and when in the week the money moves."
+)
+
+rf = pd.DataFrame(FIAT_MONTHLY)
+rf["ticket"] = rf["volume_usd"] / rf["transactions"]
+mix = pd.DataFrame(METHOD_MIX_2025).T
+mix["revenue_weight"] = mix["share_of_volume_pct"] * mix["take_rate_pct"]
+blended_take = mix["revenue_weight"].sum() / mix["share_of_volume_pct"].sum()
+mix["share_of_revenue_pct"] = mix["revenue_weight"] / mix["revenue_weight"].sum() * 100
+by_month = rf.set_index("month")
+last_m = rf["month"].iloc[-1]
+prev_year_m = f"{int(last_m[:4]) - 1}{last_m[4:]}"
+vol_yoy = (by_month.loc[last_m, "volume_usd"] / by_month.loc[prev_year_m, "volume_usd"] - 1) * 100
+
+kpi_grid([
+    {"icon": ICON["growth"], "label": f"Fiat volume, YoY ({last_m})", "value": f"{vol_yoy:+.0f}%",
+     "positive": vol_yoy >= 0},
+    {"icon": ICON["pix_page"], "label": "PIX share of volume (Jan–Jul 2025)",
+     "value": f"{METHOD_MIX_2025['PIX']['share_of_volume_pct']:.1f}%"},
+    {"icon": ICON["fees"], "label": "Blended take rate (Jan–Jul 2025)", "value": f"{blended_take:.2f}%"},
+    {"icon": ICON["status"], "label": "Refund rate (Sep 2025)", "value": f"{SEP_2025['refund_rate_pct']:.1f}%"},
+])
+
+# ---- Volume and transactions
+section_header(ICON["overview"], "Fiat volume and transactions by month")
+fig_rv = go.Figure()
+fig_rv.add_trace(go.Bar(
+    x=rf["month"], y=rf["transactions"], name="Transactions", yaxis="y2",
+    marker_color=COLOR_PIX_OUT + "55", hovertemplate="%{x}<br>Transactions: %{y:,.0f}<extra></extra>",
+))
+fig_rv.add_trace(go.Scatter(
+    x=rf["month"], y=rf["volume_usd"], name="Volume (US$)", mode="lines+markers",
+    line=dict(color=COLOR_PIX_IN, width=2.5, shape="spline", smoothing=0.3), marker=dict(size=6),
+    hovertemplate="%{x}<br>Volume: US$ %{y:,.0f}<extra></extra>",
+))
+apply_default_layout(fig_rv, height=360)
+fig_rv.update_layout(
+    hovermode="x unified", legend=dict(orientation="h", y=1.12),
+    yaxis=dict(title="Volume (US$, masked)"),
+    yaxis2=dict(title="Transactions (masked)", overlaying="y", side="right", showgrid=False),
+)
+st.plotly_chart(fig_rv, use_container_width=True)
+
+step = by_month.loc["2024-08", "volume_usd"] / by_month.loc["2024-07", "volume_usd"]
+y25 = rf[rf["month"].str.startswith("2025")]
+vol_25 = (y25["volume_usd"].iloc[-1] / y25["volume_usd"].iloc[0] - 1) * 100
+tx_25 = (y25["transactions"].iloc[-1] / y25["transactions"].iloc[0] - 1) * 100
+ticket_25 = (y25["ticket"].iloc[-1] / y25["ticket"].iloc[0] - 1) * 100
+# Users and transactions carry the same count masking, so this ratio is real.
+au = pd.DataFrame(USERS_MONTHLY).set_index("month")["active_users"]
+users_25 = (au[y25["month"].iloc[-1]] / au[y25["month"].iloc[0]] - 1) * 100
+tx_per_user = (by_month["transactions"] / au).dropna()
+freq_25 = tx_per_user[y25["month"].iloc[-1]] / tx_per_user[y25["month"].iloc[0]]
+st.markdown(escape_dollar(
+    f"Two different growth modes show up. **2024 grows by size**: volume jumps **{step:.1f}×** from "
+    f"July to August 2024 — the same month the withdrawal ticket steps up (see Users & Ticket) — "
+    f"while transaction counts rise steadily. **2025 grows by frequency**: from January to December "
+    f"transactions move **{tx_25:+.0f}%** and volume **{vol_25:+.0f}%**, so the average ticket changes "
+    f"by **{ticket_25:+.0f}%** — and with active users only **{users_25:+.0f}%**, the extra transactions "
+    f"come from the same people transacting more often: **{freq_25:.1f}×** as many transactions per "
+    f"active user by year-end. Users splitting their flows into more, smaller operations is a sign of "
+    f"habit — the platform becoming part of routine money movement — but it's harder on unit "
+    f"economics, since each transaction carries roughly the same processing and support cost however "
+    f"small it is."
+))
+
+# ---- Rails
+section_header(ICON["fees"], "Rails — where volume runs and what each earns (Jan–Jul 2025)")
+col_mix, col_rate = st.columns(2)
+rails = mix.index.tolist()
+with col_mix:
+    fig_mx = go.Figure()
+    for col, label, color in (("share_of_volume_pct", "Share of volume", COLOR_PIX_IN),
+                              ("share_of_revenue_pct", "Share of revenue", STATUS["CONFIRMED"])):
+        fig_mx.add_trace(go.Bar(
+            y=rails, x=mix[col], name=label, orientation="h", marker_color=color,
+            text=[f"{v:.1f}%" for v in mix[col]], textposition="outside",
+            hovertemplate="%{y}: %{x:.1f}%<extra>" + label + "</extra>",
+        ))
+    apply_default_layout(fig_mx, title="Share of volume vs. share of revenue", height=300)
+    fig_mx.update_layout(barmode="group", xaxis=dict(range=[0, 115], ticksuffix="%"),
+                         yaxis=dict(autorange="reversed"), legend=dict(orientation="h", y=-0.2))
+    st.plotly_chart(fig_mx, use_container_width=True)
+with col_rate:
+    fig_tr = go.Figure(go.Bar(
+        x=rails, y=mix["take_rate_pct"], marker_color=[COLOR_PIX_IN, COLOR_PIX_OUT, STATUS["PENDING"]],
+        text=[f"{v:.2f}%" for v in mix["take_rate_pct"]], textposition="outside",
+        hovertemplate="%{x}: %{y:.2f}% of volume<extra></extra>",
+    ))
+    apply_default_layout(fig_tr, title="Take rate by rail", height=300)
+    fig_tr.update_layout(yaxis=dict(range=[0, mix["take_rate_pct"].max() * 1.3], ticksuffix="%"))
+    st.plotly_chart(fig_tr, use_container_width=True)
+
+pix = mix.loc["PIX"]
+st.markdown(
+    f"PIX carries **{pix['share_of_volume_pct']:.1f}%** of the volume and, even at the lowest take rate "
+    f"({pix['take_rate_pct']:.2f}%), **{pix['share_of_revenue_pct']:.0f}%** of the fiat revenue. The "
+    f"ordering matches what each rail typically costs to operate in Brazil: boleto "
+    f"({mix.loc['Boleto', 'take_rate_pct']:.2f}%) involves bank-slip fees and slower settlement, ATM "
+    f"({mix.loc['ATM', 'take_rate_pct']:.2f}%) cash handling. Those rails earn more per dollar but move too little to matter to the total — "
+    f"so the blended take rate (**{blended_take:.2f}%**) is effectively the PIX rate, and any pressure "
+    f"on PIX pricing hits nearly all fiat revenue at once."
+)
+
+# ---- Weekday
+section_header(ICON["calendar"], "When the money moves — share of value by weekday (Sep 2025)")
+wd = pd.Series(SEP_2025["weekday_share_of_value_pct"])
+fig_wd = go.Figure(go.Bar(
+    x=wd.index, y=wd.values,
+    marker_color=[COLOR_PIX_OUT if d == wd.idxmax() else COLOR_PIX_IN for d in wd.index],
+    text=[f"{v:.1f}%" for v in wd.values], textposition="outside",
+    hovertemplate="%{x}: %{y:.1f}% of the week's value<extra></extra>",
+))
+apply_default_layout(fig_wd, height=300)
+fig_wd.update_layout(yaxis=dict(range=[0, wd.max() * 1.3], ticksuffix="%"))
+st.plotly_chart(fig_wd, use_container_width=True)
+
+weekdays_share = wd[["Mon", "Tue", "Wed", "Thu", "Fri"]].sum()
+inbound = SEP_2025["inbound_share_of_value_pct"]
+st.markdown(
+    f"PIX runs 24/7, yet **{weekdays_share:.0f}%** of the value moves Monday to Friday and "
+    f"**{wd.idxmax()}** alone carries **{wd.max():.0f}%** — {wd.max() / (100 / 7):.1f}× an even share. "
+    f"Money here follows business routines, not the rail's availability. Operationally, the peak day "
+    f"sets the BRL liquidity and the support staffing the platform needs; a weekly average would "
+    f"understate both. Over the same four weeks, **{inbound:.0f}%** of the value came in and "
+    f"{100 - inbound:.0f}% went out — close to balanced, with inflows and outflows largely offsetting "
+    f"each other over the month."
+)
+
+section_header(ICON["warning"], "What this data can't tell")
+st.markdown(
+    "- **The rail mix over time.** Rail shares and take rates cover Jan–Jul 2025 only.\n"
+    "- **A typical week.** The weekday pattern is four weeks of one month; a single large client can "
+    "move it.\n"
+    "- **Why the ticket fell.** The 2025 ticket decline is read from monthly totals, without "
+    "user-level data.\n"
+    "- **Absolute scale.** Counts and US\\$ amounts are masked — compare them over time, not against "
+    "other sources."
+)
+
+# ===========================================================================
+# Modeled activity (synthetic)
+# ===========================================================================
+st.divider()
+section_header(ICON["dataset"], "Modeled activity — synthetic")
+st.markdown(
+    "A transaction-level PIX history generated algorithmically (Jan 2024 – Mar 2026), used for the "
+    "direction, status and correlation views below. It runs in R\\$, the currency PIX itself settles "
+    "in. The sidebar filters apply from here down."
+)
 period_badge(f"{start:%m/%d/%Y} — {end:%m/%d/%Y}")
 
 direction_sel = st.radio("Direction", ["Combined", "In", "Out"], horizontal=True)
