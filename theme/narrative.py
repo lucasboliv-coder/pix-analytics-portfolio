@@ -54,6 +54,58 @@ def yoy_story(
     return escape_dollar(sentence)
 
 
+def drop_partial_trailing_month(
+    months: list[str], values: list[float], dataset_end, filter_end
+) -> tuple[list[str], list[float]]:
+    """Drops the last (month, value) pair when that month isn't actually
+    complete — the dataset, or the viewer's own date filter, cuts off
+    mid-month — so a monthly narrative doesn't read a partial month as a
+    sudden move. `dataset_end`/`filter_end` are `date`s; whichever cuts off
+    earlier wins. `months` are labels like "2026-03"."""
+    if len(months) < 2:
+        return months, values
+    last_year, last_month = (int(p) for p in months[-1].split("-"))
+    cutoff = min(filter_end, dataset_end)
+    is_partial = (cutoff.year, cutoff.month) == (last_year, last_month) and (
+        cutoff.day < calendar.monthrange(last_year, last_month)[1]
+    )
+    return (months[:-1], values[:-1]) if is_partial else (months, values)
+
+
+def monthly_series_story(
+    months: list[str],
+    values: list[float],
+    dataset_end,
+    filter_end,
+    fmt: Callable[[float], str],
+) -> tuple[str, float]:
+    """Reads a chronological monthly series (labels like "2026-03") into one
+    sentence — "climbs from X to Y" if the last month is also the peak,
+    "peaks then eases" otherwise — plus the total % change used for it.
+
+    See `drop_partial_trailing_month` for why the last month may be dropped.
+    """
+    months, values = drop_partial_trailing_month(months, values, dataset_end, filter_end)
+
+    first, last = values[0], values[-1]
+    total_growth = (last / first - 1) * 100 if first else 0.0
+    peak_i = max(range(len(values)), key=lambda i: values[i])
+
+    if peak_i == len(values) - 1:
+        pace = "still climbing" if total_growth >= 0 else "still declining"
+        sentence = (
+            f"goes from {fmt(first)} in {months[0]} to {fmt(last)} by {months[-1]} — "
+            f"a {total_growth:,.0f}% change, {pace} as of the latest month."
+        )
+    else:
+        change_from_peak = (last / values[peak_i] - 1) * 100 if values[peak_i] else 0.0
+        sentence = (
+            f"peaks at {fmt(values[peak_i])} in {months[peak_i]}, then settles to {fmt(last)} "
+            f"by {months[-1]} ({change_from_peak:+.0f}% off the peak)."
+        )
+    return escape_dollar(sentence), total_growth
+
+
 def escape_dollar(text: str) -> str:
     """Escapes a literal '$' (e.g. from an "R$ 1,234" currency string) so
     st.markdown() doesn't read a pair of them as inline LaTeX and swallow

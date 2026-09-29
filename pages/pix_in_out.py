@@ -8,10 +8,10 @@ import streamlit as st
 from data_gen.generator import END_DATE, START_DATE, load_data
 from theme.charts import COLOR_PIX_IN, COLOR_PIX_OUT, STATUS, apply_default_layout
 from theme.icons import ICON, mi
-from theme.narrative import yoy_story
+from theme.narrative import drop_partial_trailing_month, escape_dollar, monthly_series_story, yoy_story
 from theme.style import kpi_grid, period_badge, section_header
 
-st.title(f"{mi(ICON['pix_page'])} PIX In / Out")
+st.title(f"{mi(ICON['pix_page'])} PIX Traded")
 
 data = load_data()
 pix_in, pix_out = data["pix_in"].copy(), data["pix_out"].copy()
@@ -65,31 +65,94 @@ tab1, tab2, tab3, tab4 = st.tabs([
 ])
 
 with tab1:
-    section_header(ICON["overview"], "Volume by month")
-    col1, col2 = st.columns(2)
-    with col1:
-        if direction_sel == "Combined":
-            monthly = df_all.groupby(["month", "direction"])["amount_brl"].sum().reset_index()
-            monthly["month"] = monthly["month"].astype(str)
-            fig = px.bar(monthly, x="month", y="amount_brl", color="direction", barmode="group",
-                         color_discrete_map={"In": COLOR_PIX_IN, "Out": COLOR_PIX_OUT},
-                         labels={"amount_brl": "Volume (R$)", "month": "Month", "direction": "Direction"})
-        else:
-            monthly = df.groupby("month")["amount_brl"].sum().reset_index()
-            monthly["month"] = monthly["month"].astype(str)
-            color = COLOR_PIX_IN if direction_sel == "In" else COLOR_PIX_OUT
-            fig = px.bar(monthly, x="month", y="amount_brl", labels={"amount_brl": "Volume (R$)", "month": "Month"})
-            fig.update_traces(marker_color=color)
-        apply_default_layout(fig)
-        st.plotly_chart(fig, use_container_width=True)
+    section_header(ICON["overview"], "Volume traded by month")
+    st.markdown(
+        "Total PIX volume moved each month, by direction — the base trend the "
+        "KPIs above roll up from."
+    )
 
-    with col2:
-        status_counts = df["status"].value_counts().reset_index()
-        status_counts.columns = ["Status", "Count"]
-        fig2 = px.pie(status_counts, values="Count", names="Status", hole=0.55,
-                      color="Status", color_discrete_map=STATUS)
-        apply_default_layout(fig2, title="Status distribution")
-        st.plotly_chart(fig2, use_container_width=True)
+    fig = go.Figure()
+    if direction_sel == "Combined":
+        monthly_in = df_all[df_all["direction"] == "In"].groupby("month")["amount_brl"].sum().reset_index()
+        monthly_out = df_all[df_all["direction"] == "Out"].groupby("month")["amount_brl"].sum().reset_index()
+        monthly_in["month"] = monthly_in["month"].astype(str)
+        monthly_out["month"] = monthly_out["month"].astype(str)
+        for label, monthly, color in (("In", monthly_in, COLOR_PIX_IN), ("Out", monthly_out, COLOR_PIX_OUT)):
+            fig.add_trace(go.Scatter(
+                x=monthly["month"], y=monthly["amount_brl"], name=label, mode="lines+markers",
+                line=dict(color=color, width=2.5, shape="spline", smoothing=0.3), marker=dict(size=6),
+                fill="tozeroy", fillcolor=color + "14",
+                hovertemplate="%{x}<br>Volume: R$ %{y:,.0f}<extra>" + label + "</extra>",
+            ))
+    else:
+        monthly = df.groupby("month")["amount_brl"].sum().reset_index()
+        monthly["month"] = monthly["month"].astype(str)
+        color = COLOR_PIX_IN if direction_sel == "In" else COLOR_PIX_OUT
+        fig.add_trace(go.Scatter(
+            x=monthly["month"], y=monthly["amount_brl"], name=direction_sel, mode="lines+markers",
+            line=dict(color=color, width=2.5, shape="spline", smoothing=0.3), marker=dict(size=6),
+            fill="tozeroy", fillcolor=color + "14",
+            hovertemplate="%{x}<br>Volume: R$ %{y:,.0f}<extra>" + direction_sel + "</extra>",
+        ))
+    apply_default_layout(fig, height=380)
+    fig.update_layout(hovermode="x unified")
+    st.plotly_chart(fig, use_container_width=True)
+
+    if direction_sel == "Combined":
+        story_in, growth_in = monthly_series_story(
+            monthly_in["month"].tolist(), monthly_in["amount_brl"].tolist(), END_DATE, end, lambda v: f"R$ {v:,.0f}"
+        )
+        story_out, growth_out = monthly_series_story(
+            monthly_out["month"].tolist(), monthly_out["amount_brl"].tolist(), END_DATE, end, lambda v: f"R$ {v:,.0f}"
+        )
+        kpi_grid(
+            [
+                {"icon": ICON["pix_in"], "label": "PIX In — total change", "value": f"{growth_in:,.0f}%", "positive": growth_in >= 0},
+                {"icon": ICON["pix_out"], "label": "PIX Out — total change", "value": f"{growth_out:,.0f}%", "positive": growth_out >= 0},
+            ]
+        )
+        col_a, col_b = st.columns(2)
+        with col_a:
+            st.markdown(f"**PIX In** {story_in}")
+        with col_b:
+            st.markdown(f"**PIX Out** {story_out}")
+    else:
+        story, growth = monthly_series_story(
+            monthly["month"].tolist(), monthly["amount_brl"].tolist(), END_DATE, end, lambda v: f"R$ {v:,.0f}"
+        )
+        st.markdown(f"**PIX {direction_sel}** {story}")
+
+    section_header(ICON["net_flow"], "Net flow by month")
+    st.markdown(
+        "Incoming volume minus outgoing, per month — positive means the "
+        "operation is a net recipient of funds that month, negative means "
+        "more moved out than in."
+    )
+    net = df_all.groupby(["month", "direction"])["amount_brl"].sum().unstack(fill_value=0)
+    net["Net"] = net.get("In", 0) - net.get("Out", 0)
+    net = net.reset_index()
+    net["month"] = net["month"].astype(str)
+
+    bar_colors = [STATUS["CONFIRMED"] if v >= 0 else STATUS["FAILED"] for v in net["Net"]]
+    fig3 = go.Figure()
+    fig3.add_trace(go.Bar(
+        x=net["month"], y=net["Net"], marker_color=bar_colors,
+        hovertemplate="%{x}<br>Net flow: R$ %{y:,.0f}<extra></extra>",
+    ))
+    fig3.add_hline(y=0, line_color="rgba(255,255,255,0.18)")
+    apply_default_layout(fig3, height=340)
+    st.plotly_chart(fig3, use_container_width=True)
+
+    months, values = drop_partial_trailing_month(net["month"].tolist(), net["Net"].tolist(), END_DATE, end)
+    total_net = sum(values)
+    best_i = max(range(len(values)), key=lambda i: values[i])
+    worst_i = min(range(len(values)), key=lambda i: values[i])
+    role = "net recipient" if total_net >= 0 else "net payer"
+    st.markdown(escape_dollar(
+        f"Over the period, the operation is a **{role} of R$ {abs(total_net):,.0f}** overall. "
+        f"Strongest net inflow: **{months[best_i]}** (R$ {values[best_i]:+,.0f}); "
+        f"weakest: **{months[worst_i]}** (R$ {values[worst_i]:+,.0f})."
+    ))
 
 with tab2:
     section_header(ICON["yoy"], "Year-over-year comparison")
