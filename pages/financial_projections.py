@@ -20,14 +20,16 @@ from theme.style import kpi_grid, section_header
 st.title(f"{mi(ICON['financials_page'])} Financial Projections")
 
 st.info(
-    "**Unlike the rest of this app, this page is not synthetic data.** "
-    "It's derived from real multi-year financial models I built professionally "
-    "for the two companies of a payments/fintech group. Company names and "
-    "product lines are fictionalized, and every figure has additionally been "
-    "transformed by an undisclosed, per-company operation before publishing — so "
-    "growth rates and cost/revenue ratios closely track the real model "
-    "(aside from rounding), but the absolute dollar and client-count values "
-    "do not.",
+    "**Unlike the rest of this app, this page is not synthetic — it's real "
+    "data, mathematically masked.** It's derived from real multi-year "
+    "financial models I built professionally for the two companies of a "
+    "payments/fintech group. Company names and product lines are "
+    "fictionalized, and every figure has additionally been run through a "
+    "random, per-company mathematical operation — generated once and never "
+    "recorded — before publishing, so growth rates and cost/revenue ratios "
+    "closely track the real model (aside from rounding), but the absolute "
+    "dollar and client-count values can't be reverse-engineered from what's "
+    "published.",
     icon=mi(ICON["warning"]),
 )
 
@@ -222,6 +224,13 @@ with tab1:
             f"room to run, while {laggard}'s scale still delivers the larger absolute gain."
         )
 
+    st.markdown(
+        "**Bigger picture:** the base forecast, the CAGR, and the Conservative-to-Optimistic "
+        "scenario spread (next tab) all reflect *organic* growth — neither company has run a paid "
+        "acquisition channel yet. The real ceiling on these curves is still unknown; every number "
+        "here is a floor built without marketing spend, not a limit reached in spite of it."
+    )
+
 # ---------------------------------------------------------------------------
 with tab2:
     section_header(ICON["scenario"], "Conservative / Pessimistic / Optimistic — 2025-2029")
@@ -238,6 +247,21 @@ with tab2:
         f"{'Client counts are the modeled level at end of 2029 under each scenario.' if is_stock else 'Revenue/cost/volume figures are cumulative totals over 2025-2029 under each scenario.'}"
     )
 
+    section_header(ICON["overview"], "What the scenario spread implies")
+    for company in COMPANIES:
+        cons = df2[(df2["company"] == company) & (df2["scenario"] == "Conservative")]["value"]
+        opt = df2[(df2["company"] == company) & (df2["scenario"] == "Optimistic")]["value"]
+        if len(cons) and len(opt) and cons.iloc[0] > 0:
+            multiple = opt.iloc[0] / cons.iloc[0]
+            st.markdown(escape_dollar(
+                f"**{company}**: the Optimistic case runs **{multiple:.1f}×** the Conservative one "
+                f"({fmt_kpi(opt.iloc[0], kpi_sel2)} vs. {fmt_kpi(cons.iloc[0], kpi_sel2)})."
+            ))
+    st.markdown(
+        "**Note:** that entire spread is modeled on organic growth alone — paid acquisition is a lever "
+        "still on the table, not one already tested and priced into the Optimistic case."
+    )
+
 # ---------------------------------------------------------------------------
 with tab3:
     section_header(ICON["costs"], "Cost breakdown by year")
@@ -251,7 +275,33 @@ with tab3:
     st.plotly_chart(fig3, use_container_width=True)
 
     total_cost_last = kpi_value(yearly, cost_company, "Total Costs", YEARS[-1])
-    kpi_grid([{"icon": ICON["costs"], "label": f"Total Costs ({YEARS[-1]})", "value": fmt_money(total_cost_last)}])
+    total_cost_first = kpi_value(yearly, cost_company, "Total Costs", YEARS[0])
+    revenue_last_c = kpi_value(yearly, cost_company, "Gross Revenue", YEARS[-1])
+    revenue_first_c = kpi_value(yearly, cost_company, "Gross Revenue", YEARS[0])
+    span = YEARS[-1] - YEARS[0]
+    cost_cagr = ((total_cost_last / total_cost_first) ** (1 / span) - 1) * 100 if total_cost_first > 0 else 0.0
+    revenue_cagr = ((revenue_last_c / revenue_first_c) ** (1 / span) - 1) * 100 if revenue_first_c > 0 else 0.0
+
+    section_header(ICON["overview"], "What the cost trend shows")
+    kpi_grid(
+        [
+            {"icon": ICON["costs"], "label": f"Total Costs ({YEARS[-1]})", "value": fmt_money(total_cost_last)},
+            {"icon": ICON["growth"], "label": "Cost CAGR", "value": f"{cost_cagr:.1f}%/yr"},
+            {"icon": ICON["revenue"], "label": "Revenue CAGR", "value": f"{revenue_cagr:.1f}%/yr"},
+        ]
+    )
+    if revenue_cagr > cost_cagr:
+        st.markdown(escape_dollar(
+            f"**{cost_company}**'s costs grow at **{cost_cagr:.1f}%/yr** — well under its "
+            f"**{revenue_cagr:.1f}%/yr** revenue growth. Each new dollar of revenue costs less to serve "
+            f"than the last: textbook operating leverage, and it's already showing up in the model before "
+            f"any paid-acquisition spend enters the cost base."
+        ))
+    else:
+        st.markdown(escape_dollar(
+            f"**{cost_company}**'s costs grow at **{cost_cagr:.1f}%/yr**, close to or above its "
+            f"**{revenue_cagr:.1f}%/yr** revenue growth — margin expansion isn't showing up yet at this stage."
+        ))
 
 # ---------------------------------------------------------------------------
 with tab4:
@@ -272,6 +322,31 @@ with tab4:
         apply_default_layout(fig5, title="Volume processed", height=340)
         fig5.update_layout(xaxis=dict(tickmode="array", tickvals=YEARS))
         st.plotly_chart(fig5, use_container_width=True)
+
+    retail_first = kpi_value(yearly, cv_company, "Retail Clients (EoP)", YEARS[0])
+    retail_last = kpi_value(yearly, cv_company, "Retail Clients (EoP)", YEARS[-1])
+    revenue_last_cv = kpi_value(yearly, cv_company, "Gross Revenue", YEARS[-1])
+    revenue_per_client = revenue_last_cv / retail_last if retail_last else 0.0
+    client_growth = (retail_last / retail_first - 1) * 100 if retail_first > 0 else 0.0
+
+    section_header(ICON["overview"], "What client growth shows")
+    kpi_grid(
+        [
+            {
+                "icon": ICON["clients"], "label": f"Retail clients ({YEARS[0]} → {YEARS[-1]})",
+                "value": f"{fmt_num(retail_first)} → {fmt_num(retail_last)}",
+                "delta": f"{client_growth:,.0f}%", "positive": client_growth >= 0,
+            },
+            {"icon": ICON["revenue"], "label": "Revenue per retail client", "value": fmt_money(revenue_per_client)},
+        ]
+    )
+    st.markdown(escape_dollar(
+        f"**{cv_company}** grew its retail base **{client_growth:,.0f}%** over the forecast window — "
+        f"entirely through organic and referral channels. **Neither company in this model has run a paid "
+        f"acquisition campaign yet** — the client-growth curve above is the organic ceiling, not the real "
+        f"one. Paid traffic is a lever that hasn't been pulled, on top of a base that's already compounding "
+        f"without it."
+    ))
 
 # ---------------------------------------------------------------------------
 with tab5:
