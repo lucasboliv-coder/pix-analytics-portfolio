@@ -6,6 +6,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
 
+from data_gen.fiat_real import FIAT_MONTHLY, FUNNEL_2025, USERS_MONTHLY
 from data_gen.generator import END_DATE, START_DATE, load_data
 from theme.charts import CATEGORICAL, COLOR_PIX_IN, COLOR_PIX_OUT, apply_default_layout
 from theme.icons import ICON, mi
@@ -38,6 +39,156 @@ for df in (pix_in, pix_out):
     df["year"] = df["created_at"].dt.year
     df["month_num"] = df["created_at"].dt.month
 
+# ===========================================================================
+# Real data (masked) — independent of the sidebar filters.
+# ===========================================================================
+section_header(ICON["lock"], "Real data — masked")
+st.markdown(
+    "Aggregated from the real records of the group's crypto-payments company. Counts and dollar "
+    "amounts are masked (see Home); **growth rates, conversion rates and ratios are the real ones**. "
+    "Values in US\\$. The sidebar filters don't apply to this block."
+)
+st.markdown(
+    "**How to read it.** A user moves through three stages: **sign-up** (acquisition), **KYC** — "
+    "identity verification, required before moving money (activation) — and **transacting** in a "
+    "given month (an *active user*, the engagement metric). Growth that only shows up in sign-ups is "
+    "marketing; growth that reaches active users is product. The block follows users down that path, "
+    "then looks at how much each of them moves."
+)
+
+real_users = pd.DataFrame(USERS_MONTHLY)
+real_users["yoy_pct"] = real_users["active_users"].pct_change(12) * 100
+real_fiat = pd.DataFrame(FIAT_MONTHLY)
+funnel = pd.DataFrame(FUNNEL_2025)
+
+last, first = real_users.iloc[-1], real_users.iloc[0]
+dec_prev = real_users[real_users["month"] == f"{int(last['month'][:4]) - 1}-{last['month'][5:]}"].iloc[0]
+yoy_last = (last["active_users"] / dec_prev["active_users"] - 1) * 100
+yoy_first_2025 = real_users[real_users["month"] == "2025-01"]["yoy_pct"].iloc[0]
+kyc_weighted = funnel["kyc_completed"].sum() / funnel["new_users"].sum() * 100
+out_in_ratio = (real_fiat["ticket_out_usd"] / real_fiat["ticket_in_usd"]).iloc[-1]
+
+kpi_grid([
+    {"icon": ICON["growth"], "label": f"Active users, YoY ({last['month']})", "value": f"{yoy_last:+.0f}%",
+     "positive": yoy_last >= 0},
+    {"icon": ICON["unique_users"], "label": f"Active users, {first['month'][:4]} → {last['month'][:4]}",
+     "value": f"{last['active_users'] / first['active_users']:.1f}×"},
+    {"icon": ICON["lock"], "label": "KYC completed ÷ sign-ups (Jan–Jul 2025)", "value": f"{kyc_weighted:.1f}%"},
+    {"icon": ICON["avg_ticket"], "label": f"Out ÷ in ticket ({real_fiat['month'].iloc[-1]})",
+     "value": f"{out_in_ratio:.1f}×"},
+])
+
+# ---- Active users
+section_header(ICON["growth"], "Active users by month")
+fig_au = go.Figure()
+fig_au.add_trace(go.Scatter(
+    x=real_users["month"], y=real_users["active_users"], name="Active users", mode="lines+markers",
+    line=dict(color=COLOR_PIX_IN, width=2.5, shape="spline", smoothing=0.3), marker=dict(size=6),
+    fill="tozeroy", fillcolor=COLOR_PIX_IN + "14", customdata=real_users["yoy_pct"],
+    hovertemplate="%{x}<br>Active users: %{y:,.0f}<br>YoY: %{customdata:+.0f}%<extra></extra>",
+))
+apply_default_layout(fig_au, height=340)
+st.plotly_chart(fig_au, use_container_width=True)
+
+y2024 = real_users[real_users["month"].str.startswith("2024")]
+y2025 = real_users[real_users["month"].str.startswith("2025")]
+peak_2025 = y2025.loc[y2025["active_users"].idxmax()]
+st.markdown(
+    f"2024 is a build-up year: active users grow **{y2024['active_users'].iloc[-1] / y2024['active_users'].iloc[0]:.1f}×** "
+    f"from January to December. 2025 opens with a step up and then **flattens** — it peaks in "
+    f"**{peak_2025['month']}** and ends the year {((last['active_users'] / peak_2025['active_users']) - 1) * 100:+.0f}% "
+    f"off that peak. The year-over-year rate tells the same story from another angle: "
+    f"**{yoy_first_2025:+.0f}%** in Jan 2025, **{yoy_last:+.0f}%** by {last['month']}. The base is still "
+    f"growing, but decelerating — the typical S-curve of a product that has captured its early, "
+    f"easy-to-reach users and now needs a new channel or segment to keep compounding."
+)
+
+# ---- Funnel
+section_header(ICON["unique_users"], "Sign-up → KYC — Jan to Jul 2025")
+fig_fn = go.Figure()
+fig_fn.add_trace(go.Bar(x=funnel["month"], y=funnel["new_users"], name="New sign-ups",
+                        marker_color=CATEGORICAL["blue"] + "80",
+                        hovertemplate="%{x}<br>Sign-ups: %{y:,.0f}<extra></extra>"))
+fig_fn.add_trace(go.Bar(x=funnel["month"], y=funnel["kyc_completed"], name="KYC completed",
+                        marker_color=CATEGORICAL["blue"],
+                        hovertemplate="%{x}<br>KYC completed: %{y:,.0f}<extra></extra>"))
+fig_fn.add_trace(go.Scatter(x=funnel["month"], y=funnel["kyc_rate_pct"], name="KYC ÷ sign-ups (%)",
+                            yaxis="y2", mode="lines+markers",
+                            line=dict(color=CATEGORICAL["yellow"], width=2, dash="dot"), marker=dict(size=8),
+                            hovertemplate="%{x}<br>KYC ÷ sign-ups: %{y:.1f}%<extra></extra>"))
+apply_default_layout(fig_fn, height=360)
+fig_fn.update_layout(
+    barmode="overlay", hovermode="x unified", legend=dict(orientation="h", y=1.12),
+    yaxis2=dict(overlaying="y", side="right", showgrid=False, range=[0, 30], ticksuffix="%", dtick=5),
+)
+st.plotly_chart(fig_fn, use_container_width=True)
+
+spike = funnel.iloc[:2]
+rest = funnel.iloc[2:]
+spike_rate = spike["kyc_completed"].sum() / spike["new_users"].sum() * 100
+rest_rate = rest["kyc_completed"].sum() / rest["new_users"].sum() * 100
+spike_multiple = spike["new_users"].mean() / rest["new_users"].mean()
+st.markdown(
+    f"January and February bring **{spike_multiple:.1f}×** the sign-ups of the months that follow — but "
+    f"only **{spike_rate:.0f}%** of them complete KYC, against **{rest_rate:.0f}%** from March on. That's "
+    f"the classic signature of a volume push: the extra sign-ups are lower-intent, so the funnel widens "
+    f"at the top and leaks more below: {spike_multiple:.1f}× the sign-ups at {spike_rate:.0f}% instead of "
+    f"{rest_rate:.0f}% yields about **{spike_multiple * spike_rate / rest_rate:.1f}×** the verified users, "
+    f"not {spike_multiple:.1f}×. The lesson for any acquisition budget is to judge a channel by "
+    f"**cost per verified user**, not cost per sign-up. After the spike, conversion settles in a stable "
+    f"~{rest['kyc_rate_pct'].min():.0f}–{rest['kyc_rate_pct'].max():.0f}% band."
+)
+
+# ---- Ticket
+section_header(ICON["avg_ticket"], "Average ticket — money in vs. money out")
+fig_tk = go.Figure()
+for col, label, color in (("ticket_in_usd", "In (BRL deposits)", COLOR_PIX_IN),
+                          ("ticket_out_usd", "Out (BRL withdrawals)", COLOR_PIX_OUT)):
+    fig_tk.add_trace(go.Scatter(
+        x=real_fiat["month"], y=real_fiat[col], name=label, mode="lines+markers",
+        line=dict(color=color, width=2.5, shape="spline", smoothing=0.3), marker=dict(size=6),
+        hovertemplate="%{x}<br>Avg ticket: US$ %{y:,.0f}<extra>" + label + "</extra>",
+    ))
+apply_default_layout(fig_tk, height=340)
+fig_tk.update_layout(hovermode="x unified", yaxis=dict(title="US$ (masked)"))
+st.plotly_chart(fig_tk, use_container_width=True)
+
+ratio = real_fiat["ticket_out_usd"] / real_fiat["ticket_in_usd"]
+before, after = ratio[real_fiat["month"] < "2024-08"], ratio[real_fiat["month"] >= "2024-08"]
+jump = real_fiat.set_index("month")["ticket_out_usd"]
+st.markdown(
+    f"Until mid-2024 the two tickets sit close together (out ÷ in averages **{before.mean():.1f}×**). In "
+    f"**August 2024** the withdrawal ticket steps up **{jump['2024-08'] / jump['2024-07']:.1f}×** in a single "
+    f"month and never comes back down: from then on a withdrawal averages **{after.mean():.1f}×** a deposit. "
+    f"Deposits stay small and frequent; withdrawals turn large and lumpy. A step change this sharp usually "
+    f"means a **new kind of user** rather than existing users changing habits — for example "
+    f"higher-balance clients who sell crypto in large blocks. That's a hypothesis the monthly totals "
+    f"can't confirm, but the implication holds either way: larger, lumpier withdrawals now set how "
+    f"much BRL the platform must keep on hand, so liquidity planning has to cover the size of the "
+    f"biggest days, not just the monthly average."
+)
+
+section_header(ICON["warning"], "What this data can't tell")
+st.markdown(
+    "- **Cohorts.** KYC completed in a month isn't only that month's sign-ups — users verify later — "
+    "so the KYC rate is a period ratio, not a true cohort conversion.\n"
+    "- **Retention.** Monthly active counts can't separate new users from returning ones.\n"
+    "- **Who the large tickets are.** The out-ticket break is read from averages; there's no "
+    "user-level data behind it here.\n"
+    "- **Absolute scale.** Counts and US\\$ amounts are masked — compare them over time, not against "
+    "other sources."
+)
+
+# ===========================================================================
+# Modeled activity (synthetic)
+# ===========================================================================
+st.divider()
+section_header(ICON["dataset"], "Modeled activity — synthetic")
+st.markdown(
+    "A transaction-level history generated algorithmically (Jan 2024 – Mar 2026), used for the "
+    "cohort-style views below that monthly real totals can't support. The sidebar filters apply from "
+    "here down."
+)
 period_badge(f"{start:%m/%d/%Y} — {end:%m/%d/%Y}")
 
 # ---------------------------------------------------------------------------

@@ -76,6 +76,7 @@ ICON = {
     "average": "calculate",
     "gas_fee": "local_gas_station",
     "bridge": "link",
+    "plan_actual": "fact_check",
     "costs": "receipt_long",
     # Alerts / links
     "lock": "lock",

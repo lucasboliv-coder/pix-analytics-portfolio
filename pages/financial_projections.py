@@ -12,6 +12,7 @@ from data_gen.financials import (
     YEARS,
     load_financials,
 )
+from data_gen.plan_vs_actual import ACTUAL_TO_PLAN, PRODUCT, PROJECTION_BUILT, SCENARIO
 from theme.charts import COLOR_COMPANY_A, COLOR_COMPANY_B, SCENARIO_COLORS, apply_default_layout
 from theme.icons import ICON, mi
 from theme.narrative import escape_dollar
@@ -37,6 +38,7 @@ data = load_financials()
 yearly, scenario = data["yearly"], data["scenario"]
 
 COMPANY_COLOR = {COMPANIES[0]: COLOR_COMPANY_A, COMPANIES[1]: COLOR_COMPANY_B}
+PVA_COMPANY = COMPANIES[0]  # the plan-vs-actual check covers PixFlow only
 
 
 def fmt_money(value: float) -> str:
@@ -156,11 +158,12 @@ kpi_grid(
     ]
 )
 
-tab1, tab2, tab3, tab4, tab5 = st.tabs([
+tab1, tab2, tab3, tab4, tab_pva, tab5 = st.tabs([
     f"{mi(ICON['growth'])} 5-Year Trend",
     f"{mi(ICON['scenario'])} Scenario Comparison",
     f"{mi(ICON['costs'])} Cost Breakdown",
     f"{mi(ICON['clients'])} Clients & Volume",
+    f"{mi(ICON['plan_actual'])} Plan vs. Actual",
     f"{mi(ICON['data'])} Data",
 ])
 
@@ -347,6 +350,57 @@ with tab4:
         f"one. Paid traffic is a lever that hasn't been pulled, on top of a base that's already compounding "
         f"without it."
     ))
+
+# ---------------------------------------------------------------------------
+with tab_pva:
+    section_header(ICON["plan_actual"], f"{PVA_COMPANY} {PRODUCT} revenue — first out-of-sample check")
+    pva = pd.DataFrame(ACTUAL_TO_PLAN)
+    st.markdown(
+        f"A projection is only as good as its first contact with reality. {PVA_COMPANY}'s revenue model "
+        f"was built in **{PROJECTION_BUILT}**, seeded with realized Jan–Jul 2025 figures — so those "
+        f"months match by construction and prove nothing. The honest test is the months *after* it was "
+        f"built. The first ones with a reliable realized figure are **{pva['month'].iloc[0]}** and "
+        f"**{pva['month'].iloc[-1]}**, for **{PRODUCT} revenue** only, compared below against the "
+        f"**{SCENARIO}** scenario. Each month's plan is set to 100, so the chart shows a real ratio — "
+        f"no absolute figure is published."
+    )
+
+    fig_pva = go.Figure()
+    fig_pva.add_trace(go.Bar(
+        x=pva["month"], y=[100] * len(pva), name=f"Plan ({SCENARIO})",
+        marker_color=SCENARIO_COLORS[SCENARIO], text=["100"] * len(pva), textposition="outside",
+        hovertemplate="%{x}<br>Plan: 100<extra></extra>",
+    ))
+    fig_pva.add_trace(go.Bar(
+        x=pva["month"], y=pva["actual_to_plan"] * 100, name="Actual",
+        marker_color=COMPANY_COLOR[PVA_COMPANY], text=[f"{v * 100:.0f}" for v in pva["actual_to_plan"]],
+        textposition="outside", hovertemplate="%{x}<br>Actual: %{y:.0f} (plan = 100)<extra></extra>",
+    ))
+    apply_default_layout(fig_pva, title="Realized revenue, indexed to plan = 100", height=360)
+    top = max(100, pva["actual_to_plan"].max() * 100)
+    fig_pva.update_layout(barmode="group", yaxis=dict(range=[0, top * 1.2]))  # room for the labels
+    st.plotly_chart(fig_pva, use_container_width=True)
+
+    lo, hi = pva["actual_to_plan"].min(), pva["actual_to_plan"].max()
+    kpi_grid([
+        {"icon": ICON["plan_actual"], "label": f"Actual ÷ plan, {row['month']}",
+         "value": f"{row['actual_to_plan']:.1f}×", "positive": row["actual_to_plan"] >= 1}
+        for _, row in pva.iterrows()
+    ])
+    beat = "above" if lo >= 1 else ("below" if hi < 1 else "around")
+    st.markdown(
+        f"**Reading.** Realized {PRODUCT.lower()} revenue came in at **{lo:.1f}× to {hi:.1f}×** the "
+        f"{SCENARIO} plan — {beat} it in both months. For a conservative case that's the direction "
+        f"you want: it was meant as a floor, and the first real months cleared it. But a gap of this "
+        f"size also says the model **underestimated** this line — a signal to revisit its {PRODUCT.lower()} "
+        f"assumptions (volume, take rate) rather than a reason to celebrate the plan."
+    )
+    st.markdown(
+        "**Limits.** Two months, one product, one scenario. Bridge revenue is volatile month to month "
+        "(see the Blockchain page), so two points can't separate a structural miss from a good streak. "
+        "The other product lines have no realized figure for these months reliable enough to compare. "
+        "This tab is a first check, and will get more meaningful as realized months accumulate."
+    )
 
 # ---------------------------------------------------------------------------
 with tab5:
