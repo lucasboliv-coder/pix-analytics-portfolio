@@ -4,7 +4,8 @@ Deterministic synthetic data generator for PixFlow Analytics.
 Nothing here comes from a real database: the whole dataset (users, PIX
 transactions and on-chain transactions) is synthesized with numpy/pandas
 from a fixed seed, so the numbers are always the same across runs and
-visitors.
+visitors. The growth curves, weekly seasonality and overall scale were
+checked against real usage numbers I have access to professionally.
 """
 
 from __future__ import annotations
