@@ -97,6 +97,68 @@ with tab1:
     fig.update_layout(hovermode="x unified")
     st.plotly_chart(fig, use_container_width=True)
 
+    # ---- Trajectory read-out: same "chart + plain-language take" pattern as
+    # the Financial Projections trend tab, applied to monthly active users.
+    section_header(ICON["overview"], "What the trend shows")
+
+    def _drop_partial_trailing_month(df: pd.DataFrame) -> pd.DataFrame:
+        """The last "month" bucket is a partial month whenever the filtered
+        period doesn't run through that month's last calendar day — e.g. the
+        dataset ending March 17 makes March look like a mid-month crash
+        against full-month Jan/Feb, when it's really just not over yet.
+        Drops it from the narrative's own read (the chart still plots it)."""
+        if len(df) < 2:
+            return df
+        last_year, last_month = (int(p) for p in df["month"].iloc[-1].split("-"))
+        cutoff = min(end, END_DATE)
+        is_partial = (cutoff.year, cutoff.month) == (last_year, last_month) and (
+            cutoff.day < calendar.monthrange(last_year, last_month)[1]
+        )
+        return df.iloc[:-1] if is_partial else df
+
+    def _series_story(df: pd.DataFrame) -> tuple[str, float]:
+        df = _drop_partial_trailing_month(df)
+        first, last = df["Active Users"].iloc[0], df["Active Users"].iloc[-1]
+        total_growth = (last / first - 1) * 100 if first else 0.0
+        peak_i = int(df["Active Users"].idxmax())
+        peak_month, peak_value = df["month"].iloc[peak_i], df["Active Users"].iloc[peak_i]
+        if peak_i == len(df) - 1:
+            pace = "still climbing" if total_growth >= 0 else "still declining"
+            sentence = (
+                f"grows from {int(first):,} active users in {df['month'].iloc[0]} to {int(last):,} by "
+                f"{df['month'].iloc[-1]} — a {total_growth:,.0f}% increase, {pace} as of the latest month."
+            )
+        else:
+            change_from_peak = (last / peak_value - 1) * 100 if peak_value else 0.0
+            sentence = (
+                f"peaks at {int(peak_value):,} active users in {peak_month}, then settles to {int(last):,} "
+                f"by {df['month'].iloc[-1]} ({change_from_peak:+.0f}% off the peak)."
+            )
+        return sentence, total_growth
+
+    story_in, growth_in_total = _series_story(m_in)
+    story_out, growth_out_total = _series_story(m_out)
+
+    kpi_grid(
+        [
+            {"icon": ICON["pix_in"], "label": "PIX In — total growth", "value": f"{growth_in_total:,.0f}%", "positive": growth_in_total >= 0},
+            {"icon": ICON["pix_out"], "label": "PIX Out — total growth", "value": f"{growth_out_total:,.0f}%", "positive": growth_out_total >= 0},
+        ]
+    )
+    col_a, col_b = st.columns(2)
+    with col_a:
+        st.markdown(f"**PIX In** {story_in}")
+    with col_b:
+        st.markdown(f"**PIX Out** {story_out}")
+
+    faster, slower = ("In", "Out") if growth_in_total >= growth_out_total else ("Out", "In")
+    faster_pct = growth_in_total if faster == "In" else growth_out_total
+    slower_pct = growth_out_total if faster == "In" else growth_in_total
+    st.markdown(
+        f"**Takeaway:** both directions move the same way over the period, but **PIX {faster}** grows "
+        f"faster ({faster_pct:,.0f}% vs. {slower_pct:,.0f}% for PIX {slower})."
+    )
+
 with tab2:
     section_header(ICON["yoy"], "Year-over-year comparison — active users")
     y_in = pix_in.groupby(["month_num", "year"])["user_id"].nunique().unstack(fill_value=0)
