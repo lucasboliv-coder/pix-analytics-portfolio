@@ -1,9 +1,10 @@
 # PixFlow Analytics
 
 **Data Analyst** portfolio project: a set of interactive Streamlit dashboards
-for a fictional PIX and crypto payments fintech. Three dashboards run on
-**synthetic data**; the fourth, Financial Projections, runs on **real data,
-mathematically masked** — see the disclaimers below.
+for a fictional PIX and crypto payments fintech. Users and PIX run on
+**synthetic data**; Financial Projections runs on **real data,
+mathematically masked**; Blockchain combines a masked real on-chain snapshot
+with a synthetic history calibrated to it — see the disclaimers below.
 
 **[Live demo](https://pix-analytics-portfolio.streamlit.app/)** — hosted on
 Streamlit Community Cloud's free tier, which sleeps after a period of
@@ -11,7 +12,7 @@ inactivity. First load after a while may take ~30 seconds to wake up; it's
 instant after that.
 
 > **Disclaimer:** "PixFlow" is a fictional brand created solely for this
-> portfolio. All users, transactions and volumes shown are generated
+> portfolio. Transaction-level users, transactions and volumes are generated
 > algorithmically (`data_gen/generator.py`, fixed seed) — there is no
 > connection to real people, companies or banks. The growth curves, weekly
 > seasonality and overall scale were checked against real usage numbers I
@@ -52,8 +53,11 @@ instant after that.
   year-over-year comparison and average ticket trend.
 - **PIX Traded** — volume, fees, status distribution and value×fee
   correlation for incoming and outgoing PIX transactions.
-- **Blockchain & Bridge** — on-chain activity by symbol (BTC, ETH, USDT,
-  MATIC, SOL), year-over-year comparison and status analysis.
+- **Blockchain & Bridge** — opens with **real on-chain data, masked**:
+  monthly bridge volume and take rate, plus a route/direction/symbol/success
+  snapshot, in US$. Below it, a synthetic transaction-level history
+  (USDT, BTC and a fictional platform token, PFT) calibrated to that
+  snapshot, with year-over-year comparison and status analysis.
 - **Financial Projections** — revenue, cost and client-growth projections
   through 2029 across 3 scenarios (Conservative/Pessimistic/Optimistic), for
   the group's two companies. **Not synthetic** — see the disclaimer below.
@@ -69,6 +73,11 @@ instant after that.
 > rounding), the absolute numbers do not.
 > The source spreadsheets
 > themselves are never committed to this repository (see `.gitignore`).
+>
+> The same approach covers the real block on the Blockchain page
+> (`data_gen/chain_real.py`): only monthly aggregates leave the source —
+> no addresses, hashes or user data — with volumes and counts masked and
+> percentages (take rate, shares, success rates) kept real.
 
 ## Stack
 
@@ -96,6 +105,7 @@ pix-analytics-portfolio/
 ├── data_gen/
 │   ├── generator.py          # deterministic synthetic dataset generator (fixed seed)
 │   ├── names.py               # common BR names used only to give personas a realistic look
+│   ├── chain_real.py          # masked real on-chain monthly aggregates (see disclaimer above)
 │   └── financials.py          # anonymized real financial KPIs (see disclaimer above)
 └── theme/
     ├── style.py               # CSS (glassmorphism) + KPI card components

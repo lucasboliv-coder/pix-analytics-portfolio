@@ -43,11 +43,9 @@ COLOR_PIX_OUT = CATEGORICAL["orange"]
 COLOR_BLOCKCHAIN = CATEGORICAL["blue"]
 COLOR_BRIDGE = CATEGORICAL["teal"]
 SYMBOL_COLORS = {
-    "BTC": CATEGORICAL["blue"],
-    "ETH": CATEGORICAL["orange"],
     "USDT": CATEGORICAL["teal"],
-    "MATIC": CATEGORICAL["yellow"],
-    "SOL": CATEGORICAL["magenta"],
+    "PFT": CATEGORICAL["violet"],
+    "BTC": CATEGORICAL["yellow"],
 }
 
 # Status — reserved, never repurposed as "series 4"

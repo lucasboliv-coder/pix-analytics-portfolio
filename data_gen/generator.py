@@ -5,7 +5,9 @@ Nothing here comes from a real database: the whole dataset (users, PIX
 transactions and on-chain transactions) is synthesized with numpy/pandas
 from a fixed seed, so the numbers are always the same across runs and
 visitors. The growth curves, weekly seasonality and overall scale were
-checked against real usage numbers I have access to professionally.
+checked against real usage numbers I have access to professionally, and
+the on-chain mix (route split, symbols, success rates, bridge take rate) is
+calibrated to the real, masked snapshot in chain_real.py.
 """
 
 from __future__ import annotations
@@ -16,6 +18,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
+from data_gen.chain_real import BLOCKCHAIN_MONTHLY, BRIDGE_MONTHLY, SNAPSHOT, SNAPSHOT_PERIOD
 from data_gen.names import FIRST_NAMES_F, FIRST_NAMES_M, LAST_NAMES
 
 START_DATE = dt.date(2024, 1, 1)
@@ -135,6 +138,15 @@ def _generate_pix(rng: np.random.Generator, users: pd.DataFrame, direction: str)
     return df.sort_values("created_at").reset_index(drop=True)
 
 
+def _real_bridge_share() -> float:
+    """Bridge share of on-chain transactions over the real snapshot months.
+    Both counts carry the same masking, so the ratio is the real one."""
+    months = set(SNAPSHOT_PERIOD)
+    bridge = sum(r["transactions"] for r in BRIDGE_MONTHLY if r["month"] in months)
+    direct = sum(r["transactions"] for r in BLOCKCHAIN_MONTHLY if r["month"] in months)
+    return bridge / (bridge + direct)
+
+
 def _generate_chain(rng: np.random.Generator, pix_out: pd.DataFrame) -> pd.DataFrame:
     # on-chain activity follows (with noise) the PIX OUT withdrawal volume
     daily_volume = pix_out.groupby(pix_out["created_at"].dt.date)["amount_brl"].sum()
@@ -146,17 +158,32 @@ def _generate_chain(rng: np.random.Generator, pix_out: pd.DataFrame) -> pd.DataF
     dates = np.repeat(days.values, n_per_day)
     n = len(dates)
 
-    tx_type = rng.choice(["BLOCKCHAIN", "BRIDGE"], size=n, p=[0.7, 0.3])
-    symbol = rng.choice(
-        ["BTC", "ETH", "USDT", "MATIC", "SOL"], size=n, p=[0.28, 0.24, 0.26, 0.13, 0.09]
-    )
+    # Route split, symbol mix, success rates and the bridge take-rate range
+    # are calibrated to the real (masked) figures in chain_real.py.
+    p_bridge = _real_bridge_share()
+    tx_type = rng.choice(["BLOCKCHAIN", "BRIDGE"], size=n, p=[1 - p_bridge, p_bridge])
+    symbol_share = SNAPSHOT["symbol_share_of_transactions_pct"]
+    symbols = list(symbol_share)
+    weights = np.array([symbol_share[s] for s in symbols])
+    symbol = rng.choice(symbols, size=n, p=weights / weights.sum())
 
     value = rng.lognormal(mean=5.2, sigma=1.2, size=n)
     value = np.clip(value, 5, 80_000).round(2)
     tx_fee = np.clip(value * rng.uniform(0.001, 0.006, size=n), 0.1, None).round(3)
-    fee_value = np.where(tx_type == "BRIDGE", np.clip(value * rng.uniform(0.002, 0.01, size=n), 0.1, None).round(3), 0.0)
+    take_rates = [r["take_rate_pct"] / 100 for r in BRIDGE_MONTHLY]
+    bridge_rate = rng.uniform(min(take_rates), max(take_rates), size=n)
+    fee_value = np.where(tx_type == "BRIDGE", np.clip(value * bridge_rate, 0.1, None).round(3), 0.0)
 
-    status = rng.choice(["CONFIRMED", "PENDING", "FAILED"], size=n, p=[0.95, 0.03, 0.02])
+    status = np.empty(n, dtype=object)
+    for route in ("BLOCKCHAIN", "BRIDGE"):
+        mask = tx_type == route
+        # Real success rate per route; the remainder is split pending/failed
+        # 2:1 (modeled — the split itself isn't part of the real snapshot).
+        ok = SNAPSHOT["success_rate_pct"][route] / 100
+        status[mask] = rng.choice(
+            ["CONFIRMED", "PENDING", "FAILED"], size=mask.sum(),
+            p=[ok, (1 - ok) * 2 / 3, (1 - ok) / 3],
+        )
 
     tx_hash = [
         "0x" + "".join(rng.choice(list("0123456789abcdef"), size=64)) for _ in range(n)

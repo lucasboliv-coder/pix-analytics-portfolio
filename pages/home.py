@@ -16,8 +16,8 @@ with col_bio:
         "showcase that kind of work end-to-end — data generation, modeling, and dashboard design. "
         "The product dashboards (Users, PIX, Blockchain) run on synthetic data, generated algorithmically "
         "with scale and growth curves checked against real usage numbers I have access to professionally; "
-        "Financial Projections runs on real financial data, mathematically masked before publishing (see "
-        "the disclaimer below)."
+        "Blockchain also opens with a block of real on-chain data, and Financial Projections runs on real "
+        "financial data — both mathematically masked before publishing (see the disclaimer below)."
     )
 with col_links:
     st.link_button(
@@ -50,7 +50,11 @@ st.info(
     "including by me — before publishing. Growth rates and cost/revenue "
     "ratios closely track the real model (aside from rounding); the absolute "
     "numbers can't be reverse-engineered from what's published. See that "
-    "page for details.",
+    "page for details. "
+    "**Blockchain** mixes both: its top block is real on-chain data (monthly "
+    "aggregates only, masked the same way — take rate, shares and success "
+    "rates are the real ones), and the synthetic history below it is "
+    "calibrated to that block.",
     icon=mi(ICON["lock"]),
 )
 
@@ -69,7 +73,7 @@ kpi_grid(
     [
         {"icon": ICON["users_page"], "label": "Registered users", "value": f"{len(users):,}"},
         {"icon": "payments", "label": "PIX volume (in + out)", "value": f"R$ {pix_volume:,.0f}"},
-        {"icon": ICON["chain_page"], "label": "On-chain volume", "value": f"{chain_volume:,.0f}"},
+        {"icon": ICON["chain_page"], "label": "On-chain volume", "value": f"US$ {chain_volume:,.0f}"},
         {"icon": ICON["transactions"], "label": "Total transactions", "value": f"{total_transactions:,}"},
     ]
 )
@@ -97,7 +101,7 @@ with col3:
     st.markdown(f"#### {mi(ICON['chain_page'])} Blockchain")
     st.markdown(
         "On-chain and bridge activity, by symbol, with year-over-year "
-        "comparison and status analysis."
+        "comparison and status analysis. *(real snapshot, masked + calibrated synthetic history)*"
     )
     st.page_link("pages/blockchain.py", label="Open dashboard", icon=mi(ICON["chain_page"]))
 with col4:

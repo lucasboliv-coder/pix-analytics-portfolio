@@ -75,6 +75,7 @@ ICON = {
     "value": "diamond",
     "average": "calculate",
     "gas_fee": "local_gas_station",
+    "bridge": "link",
     "costs": "receipt_long",
     # Alerts / links
     "lock": "lock",
