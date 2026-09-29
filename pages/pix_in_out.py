@@ -94,7 +94,8 @@ apply_default_layout(fig_rv, height=360)
 fig_rv.update_layout(
     hovermode="x unified", legend=dict(orientation="h", y=1.12),
     yaxis=dict(title="Volume (US$, masked)"),
-    yaxis2=dict(title="Transactions (masked)", overlaying="y", side="right", showgrid=False),
+    yaxis2=dict(title="Transactions (masked)", overlaying="y", side="right", showgrid=False,
+                tickmode="auto", nticks=6, tickformat="~s", rangemode="tozero"),
 )
 st.plotly_chart(fig_rv, use_container_width=True)
 
