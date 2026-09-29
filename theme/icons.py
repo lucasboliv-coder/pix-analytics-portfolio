@@ -59,6 +59,7 @@ ICON = {
     "status": "science",
     "symbol": "monetization_on",
     "growth": "trending_up",
+    "net_flow": "swap_vert",
     # KPI concepts
     "revenue": "payments",
     "ebitda": "trending_up",
