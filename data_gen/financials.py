@@ -7,13 +7,13 @@ companies of a payments/fintech group. Two layers of masking are applied
 before anything here is published:
 
 1. Company and product names are fully fictionalized.
-2. Every figure is scaled by a fixed, per-company multiplier that was
-   generated once and discarded — never recorded anywhere, including here.
-   The same multiplier is applied to every KPI for a given company, so
-   year-over-year growth rates and cross-KPI ratios (e.g. cost as a share
-   of revenue) closely track the real model's — small deviations come from
-   independently rounding each output value, not from the masking itself.
-   The absolute dollar/count values below are not the real ones.
+2. Every figure is run through a random, per-company mathematical operation
+   that was generated once and discarded — never recorded anywhere,
+   including here. The same operation is applied to every KPI for a given
+   company, so year-over-year growth rates and cross-KPI ratios (e.g. cost
+   as a share of revenue) closely track the real model's — small deviations
+   come from independently rounding each output value, not from the masking
+   itself. The absolute dollar/count values below are not the real ones.
 
 The numbers below are the masked output — there is no way to recover the
 original figures from them.
