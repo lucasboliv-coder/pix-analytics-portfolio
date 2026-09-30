@@ -23,11 +23,11 @@ with col_links:
     st.link_button(
         "Resume",
         "https://raw.githubusercontent.com/lucasboliv-coder/pix-analytics-portfolio/master/docs/Lucas_Bastos_Resume.pdf",
-        icon=mi(ICON["resume"]), use_container_width=True,
+        icon=mi(ICON["resume"]), width="stretch",
     )
-    st.link_button("LinkedIn", "https://www.linkedin.com/in/lucas-bastos-56756084/", icon=mi(ICON["linkedin"]), use_container_width=True)
-    st.link_button("GitHub", "https://github.com/lucasboliv-coder", icon=mi(ICON["github"]), use_container_width=True)
-    st.link_button("Email", "mailto:lucasboliv@gmail.com", icon=mi(ICON["email"]), use_container_width=True)
+    st.link_button("LinkedIn", "https://www.linkedin.com/in/lucas-bastos-56756084/", icon=mi(ICON["linkedin"]), width="stretch")
+    st.link_button("GitHub", "https://github.com/lucasboliv-coder", icon=mi(ICON["github"]), width="stretch")
+    st.link_button("Email", "mailto:lucasboliv@gmail.com", icon=mi(ICON["email"]), width="stretch")
 
 st.markdown("---")
 

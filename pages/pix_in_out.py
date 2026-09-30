@@ -97,7 +97,7 @@ fig_rv.update_layout(
     yaxis2=dict(title="Transactions (masked)", overlaying="y", side="right", showgrid=False,
                 tickmode="auto", nticks=6, tickformat="~s", rangemode="tozero"),
 )
-st.plotly_chart(fig_rv, use_container_width=True)
+st.plotly_chart(fig_rv, width="stretch")
 
 step = by_month.loc["2024-08", "volume_usd"] / by_month.loc["2024-07", "volume_usd"]
 y25 = rf[rf["month"].str.startswith("2025")]
@@ -138,7 +138,7 @@ with col_mix:
     apply_default_layout(fig_mx, title="Share of volume vs. share of revenue", height=300)
     fig_mx.update_layout(barmode="group", xaxis=dict(range=[0, 115], ticksuffix="%"),
                          yaxis=dict(autorange="reversed"), legend=dict(orientation="h", y=-0.2))
-    st.plotly_chart(fig_mx, use_container_width=True)
+    st.plotly_chart(fig_mx, width="stretch")
 with col_rate:
     fig_tr = go.Figure(go.Bar(
         x=rails, y=mix["take_rate_pct"], marker_color=[COLOR_PIX_IN, COLOR_PIX_OUT, STATUS["PENDING"]],
@@ -147,7 +147,7 @@ with col_rate:
     ))
     apply_default_layout(fig_tr, title="Take rate by rail", height=300)
     fig_tr.update_layout(yaxis=dict(range=[0, mix["take_rate_pct"].max() * 1.3], ticksuffix="%"))
-    st.plotly_chart(fig_tr, use_container_width=True)
+    st.plotly_chart(fig_tr, width="stretch")
 
 pix = mix.loc["PIX"]
 st.markdown(
@@ -171,7 +171,7 @@ fig_wd = go.Figure(go.Bar(
 ))
 apply_default_layout(fig_wd, height=300)
 fig_wd.update_layout(yaxis=dict(range=[0, wd.max() * 1.3], ticksuffix="%"))
-st.plotly_chart(fig_wd, use_container_width=True)
+st.plotly_chart(fig_wd, width="stretch")
 
 weekdays_share = wd[["Mon", "Tue", "Wed", "Thu", "Fri"]].sum()
 inbound = SEP_2025["inbound_share_of_value_pct"]
@@ -262,7 +262,7 @@ with tab1:
         ))
     apply_default_layout(fig, height=380)
     fig.update_layout(hovermode="x unified")
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
     if direction_sel == "Combined":
         story_in, growth_in = monthly_series_story(
@@ -307,7 +307,7 @@ with tab1:
     ))
     fig3.add_hline(y=0, line_color="rgba(255,255,255,0.18)")
     apply_default_layout(fig3, height=340)
-    st.plotly_chart(fig3, use_container_width=True)
+    st.plotly_chart(fig3, width="stretch")
 
     months, values = drop_partial_trailing_month(net["month"].tolist(), net["Net"].tolist(), END_DATE, end)
     total_net = sum(values)
@@ -332,7 +332,7 @@ with tab2:
         tickmode="array", tickvals=list(range(1, 13)),
         ticktext=[calendar.month_abbr[m] for m in range(1, 13)],
     ))
-    st.plotly_chart(fig3, use_container_width=True)
+    st.plotly_chart(fig3, width="stretch")
 
     if len(years) >= 2:
         y_prev, y_curr = years[-2], years[-1]
@@ -342,7 +342,7 @@ with tab3:
     section_header(ICON["search"], "High-value transactions")
     high_value = df[df["amount_brl"] > df["amount_brl"].quantile(0.97)]
     st.dataframe(high_value[["user_id", "direction", "amount_brl", "fee_brl", "status", "created_at"]]
-                 .sort_values("amount_brl", ascending=False).head(50), use_container_width=True)
+                 .sort_values("amount_brl", ascending=False).head(50), width="stretch")
 
 with tab4:
     section_header(ICON["correlation"], "Amount × Fee")
@@ -351,5 +351,5 @@ with tab4:
                       labels={"amount_brl": "Amount (R$)", "fee_brl": "Fee (R$)"})
     fig4.update_traces(marker=dict(color="#3987e5"))
     apply_default_layout(fig4, height=400)
-    st.plotly_chart(fig4, use_container_width=True)
+    st.plotly_chart(fig4, width="stretch")
     st.caption(f"Correlation (Pearson): {df['amount_brl'].corr(df['fee_brl']):.2f}")

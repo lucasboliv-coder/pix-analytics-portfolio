@@ -120,7 +120,7 @@ fig_real.update_layout(
                 range=[0, 1], ticksuffix="%", tickformat=".1f"),
     legend=dict(orientation="h", y=1.12),
 )
-st.plotly_chart(fig_real, use_container_width=True)
+st.plotly_chart(fig_real, width="stretch")
 
 h1 = bridge_real[bridge_real["month"] < "2025-08"]
 recent = bridge_real[bridge_real["month"] >= "2025-12"]
@@ -161,7 +161,7 @@ with col_wf:
     ))
     apply_default_layout(fig_wf, title=f"Bridge revenue, {dec['month']} = 100", height=340)
     fig_wf.update_layout(showlegend=False, yaxis=dict(rangemode="tozero"))
-    st.plotly_chart(fig_wf, use_container_width=True)
+    st.plotly_chart(fig_wf, width="stretch")
 with col_ue:
     kpi_grid([
         {"icon": ICON["fees"], "label": "Revenue per US$ 1,000 bridged",
@@ -189,7 +189,7 @@ with col_mix:
                      color_discrete_map=SYMBOL_COLORS)
     fig_mix.update_traces(hovertemplate="%{label}: %{value:.1f}% of transactions<extra></extra>")
     apply_default_layout(fig_mix, title="Transactions by symbol", height=320)
-    st.plotly_chart(fig_mix, use_container_width=True)
+    st.plotly_chart(fig_mix, width="stretch")
 with col_split:
     out_share = SNAPSHOT["blockchain_out_share_of_usd_pct"]
     bridge_share = SNAPSHOT["bridge_share_of_usd_pct"]
@@ -211,7 +211,7 @@ with col_split:
         ))
     fig_split.update_layout(barmode="stack", xaxis=dict(range=[0, 100], ticksuffix="%"))
     apply_default_layout(fig_split, title="Share of US$ value", height=320)
-    st.plotly_chart(fig_split, use_container_width=True)
+    st.plotly_chart(fig_split, width="stretch")
 
 direct_months = pd.DataFrame(BLOCKCHAIN_MONTHLY)
 tx_growth = (direct_months["transactions"].iloc[-1] / direct_months["transactions"].iloc[0] - 1) * 100
@@ -317,7 +317,7 @@ with tab1:
         ))
     apply_default_layout(fig, height=380)
     fig.update_layout(hovermode="x unified")
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
     types_present = [t for t in ("BLOCKCHAIN", "BRIDGE") if t in monthly["type"].unique()]
     stories = {}
@@ -375,7 +375,7 @@ with tab1:
                    color_discrete_map=SYMBOL_COLORS, labels={"value": "Value (US$)", "symbol": "Symbol"})
     fig_s.update_layout(showlegend=False)
     apply_default_layout(fig_s, height=320)
-    st.plotly_chart(fig_s, use_container_width=True)
+    st.plotly_chart(fig_s, width="stretch")
 
     if len(by_symbol) >= 3 and by_symbol["value"].sum():
         shares = by_symbol.set_index("symbol")["value"] / by_symbol["value"].sum() * 100
@@ -402,7 +402,7 @@ with tab2:
             tickmode="array", tickvals=list(range(1, 13)),
             ticktext=[calendar.month_abbr[m] for m in range(1, 13)],
         ))
-        st.plotly_chart(fig2, use_container_width=True)
+        st.plotly_chart(fig2, width="stretch")
 
         years = sorted(pivot.columns)
         if len(years) >= 2:
@@ -436,7 +436,7 @@ with tab3:
         fig3 = px.pie(status_counts, values="Count", names="Status", hole=0.55,
                       color="Status", color_discrete_map=STATUS)
         apply_default_layout(fig3, height=320)
-        st.plotly_chart(fig3, use_container_width=True)
+        st.plotly_chart(fig3, width="stretch")
     with col2:
         section_header(ICON["correlation"], "Value × Fee")
         sample = df.sample(min(len(df), 3000), random_state=42) if len(df) else df
@@ -444,7 +444,7 @@ with tab3:
                           labels={"value": "Value (US$)", "tx_fee": "Fee (US$)"})
         fig4.update_traces(marker=dict(color=COLOR_BLOCKCHAIN))
         apply_default_layout(fig4, height=320)
-        st.plotly_chart(fig4, use_container_width=True)
+        st.plotly_chart(fig4, width="stretch")
 
     section_header(ICON["overview"], "What status and fees show")
     if status_sel != "All":
@@ -496,4 +496,4 @@ with tab4:
     section_header(ICON["data"], "Raw data (sample)")
     display_df = df.copy()
     display_df["tx_hash"] = display_df["tx_hash"].str[:18] + "..."
-    st.dataframe(display_df.head(300), use_container_width=True)
+    st.dataframe(display_df.head(300), width="stretch")

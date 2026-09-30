@@ -88,7 +88,7 @@ fig_au.add_trace(go.Scatter(
     hovertemplate="%{x}<br>Active users: %{y:,.0f}<br>YoY: %{customdata:+.0f}%<extra></extra>",
 ))
 apply_default_layout(fig_au, height=340)
-st.plotly_chart(fig_au, use_container_width=True)
+st.plotly_chart(fig_au, width="stretch")
 
 y2024 = real_users[real_users["month"].str.startswith("2024")]
 y2025 = real_users[real_users["month"].str.startswith("2025")]
@@ -121,7 +121,7 @@ fig_fn.update_layout(
     barmode="overlay", hovermode="x unified", legend=dict(orientation="h", y=1.12),
     yaxis2=dict(overlaying="y", side="right", showgrid=False, range=[0, 30], ticksuffix="%", dtick=5),
 )
-st.plotly_chart(fig_fn, use_container_width=True)
+st.plotly_chart(fig_fn, width="stretch")
 
 spike = funnel.iloc[:2]
 rest = funnel.iloc[2:]
@@ -151,7 +151,7 @@ for col, label, color in (("ticket_in_usd", "In (BRL deposits)", COLOR_PIX_IN),
     ))
 apply_default_layout(fig_tk, height=340)
 fig_tk.update_layout(hovermode="x unified", yaxis=dict(title="US$ (masked)"))
-st.plotly_chart(fig_tk, use_container_width=True)
+st.plotly_chart(fig_tk, width="stretch")
 
 ratio = real_fiat["ticket_out_usd"] / real_fiat["ticket_in_usd"]
 before, after = ratio[real_fiat["month"] < "2024-08"], ratio[real_fiat["month"] >= "2024-08"]
@@ -246,7 +246,7 @@ with tab1:
     ))
     apply_default_layout(fig, height=380)
     fig.update_layout(hovermode="x unified")
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
     # ---- Trajectory read-out: same "chart + plain-language take" pattern as
     # the Financial Projections trend tab, applied to monthly active users.
@@ -324,7 +324,7 @@ with tab2:
         fig.add_trace(go.Bar(x=month_labels, y=yearly[y_curr], name=str(y_curr), marker_color=CATEGORICAL["blue"]))
         fig.update_layout(barmode="group")
         apply_default_layout(fig, height=360)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
         st.markdown(yoy_story(yearly[y_prev], yearly[y_curr], y_prev, y_curr, lambda v: f"{v:,.0f}"))
     else:
         st.info("More than one year in the selected period is needed to compare.")
@@ -353,7 +353,7 @@ with tab3:
     ))
     apply_default_layout(fig, height=380)
     fig.update_layout(hovermode="x unified")
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
     avg_in, avg_out = t_in["mean"].mean(), t_out["mean"].mean()
     higher, lower = ("In", "Out") if avg_in >= avg_out else ("Out", "In")
