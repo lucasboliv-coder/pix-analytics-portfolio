@@ -30,7 +30,6 @@ original figures from them.
 from __future__ import annotations
 
 import pandas as pd
-import streamlit as st
 
 COMPANIES = ["PixFlow", "NovaPay Finance"]
 YEARS = [2025, 2026, 2027, 2028, 2029]
@@ -120,9 +119,13 @@ def _add_estimated_ebitda() -> None:
 _add_estimated_ebitda()
 
 
-@st.cache_data(show_spinner=False)
 def load_financials() -> dict[str, pd.DataFrame]:
-    """Single entry point: returns the yearly trend and scenario tables in long format."""
+    """Single entry point: returns the yearly trend and scenario tables in long format.
+
+    Deliberately not cached: st.cache_data keys on this function's code, not on
+    the module-level tables it reads, so a cached copy would keep serving old
+    figures after the tables change. Building these small frames is instant.
+    """
     yearly_rows = [
         {"company": company, "kpi": kpi, "year": year, "value": value}
         for company, kpis in _YEARLY.items()

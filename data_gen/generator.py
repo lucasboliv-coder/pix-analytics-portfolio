@@ -207,9 +207,17 @@ def _generate_chain(rng: np.random.Generator, pix_out: pd.DataFrame) -> pd.DataF
     return df.sort_values("timestamp").reset_index(drop=True)
 
 
-@st.cache_data(show_spinner="Generating synthetic dataset...")
 def load_data(seed: int = DEFAULT_SEED) -> dict[str, pd.DataFrame]:
     """Single entry point: generates (and caches) the synthetic dataset."""
+    # st.cache_data keys on a function's code and arguments, not on module-level
+    # data it reads — so the calibration inputs are passed in explicitly, and a
+    # change to chain_real.py regenerates the dataset instead of reusing a stale one.
+    calibration = repr((BRIDGE_MONTHLY, BLOCKCHAIN_MONTHLY, SNAPSHOT, SNAPSHOT_PERIOD))
+    return _generate_all(seed, calibration)
+
+
+@st.cache_data(show_spinner="Generating synthetic dataset...")
+def _generate_all(seed: int, calibration: str) -> dict[str, pd.DataFrame]:
     rng = np.random.default_rng(seed)
 
     users = _generate_users(rng)
