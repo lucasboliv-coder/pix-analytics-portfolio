@@ -187,7 +187,9 @@ with tab1:
     kpi_sel = st.selectbox("KPI", HEADLINE_KPIS, key="trend_kpi")
     is_margin = kpi_sel == "Estimated EBITDA"      # starts negative for one company: read it as a margin
     is_client = kpi_sel in {"Retail Clients (EoP)", "Institutional Clients (EoP)"}
-    base_year = YEARS[1] if is_client else YEARS[0]  # 2025 client counts come from a different source column
+    # 2025 client counts are the actual balance when the model was built; later years are year-end
+    # projections — client growth is measured from 2026 so it compares year-end to year-end.
+    base_year = YEARS[1] if is_client else YEARS[0]
 
     def company_series(c: str, kpi: str) -> pd.Series:
         return yearly[(yearly["company"] == c) & (yearly["kpi"] == kpi)].set_index("year")["value"].sort_index()
@@ -319,8 +321,9 @@ with tab1:
                 f"early climb and a steady path can average out to similar numbers and mean very different things."
             )
     if is_client:
-        st.caption(f"Client counts are measured from {base_year}: the source model's {YEARS[0]} client column doesn't "
-                   f"line up with its full-year {YEARS[0]} revenue and volume (see Clients & Volume).")
+        st.caption(f"The {YEARS[0]} client count is the actual balance when the model was built; {base_year}–{YEARS[-1]} "
+                   f"are year-end projections. Growth is measured from {base_year} so every year compares year-end "
+                   f"to year-end.")
 
     section_header(ICON["warning"], "What to take from this")
     st.markdown(
@@ -645,12 +648,12 @@ with tab3:
 # ---------------------------------------------------------------------------
 with tab4:
     section_header(ICON["clients"], "Clients & volume — where the growth comes from")
-    y_start = YEARS[1]  # 2025 client counts come from a different source column than the flows
+    y_start = YEARS[1]  # 2025 = actual balance when the model was built; measure year-end to year-end
     st.markdown(
         f"Volume grows either because there are **more clients** or because **each client moves more** — and "
-        f"the two mean very different businesses. This tab splits the forecast along that line. It measures "
-        f"from **{y_start}**: the {YEARS[0]} client counts in the source model come from a different column than "
-        f"the {YEARS[0]} revenue and volume, so they don't line up with the rest of the year."
+        f"the two mean very different businesses. This tab splits the forecast along that line. The "
+        f"{YEARS[0]} client count is the actual balance when the model was built, and {y_start}–{YEARS[-1]} are "
+        f"year-end projections — so growth is measured from **{y_start}**, comparing year-end to year-end."
     )
     cv_company = st.radio("Company", COMPANIES, horizontal=True, key="cv_company")
 
@@ -764,7 +767,7 @@ with tab4:
     )
     st.caption(
         f"Clients = retail + institutional, end of period. Per-client figures divide the year's volume or "
-        f"revenue by end-of-year clients. Measured from {y_start}; see the note at the top on {YEARS[0]}."
+        f"revenue by end-of-year clients. Measured from {y_start}, year-end to year-end."
     )
 
 # ---------------------------------------------------------------------------
