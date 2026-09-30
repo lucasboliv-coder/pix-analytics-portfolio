@@ -186,7 +186,7 @@ with tab1:
         ))
     apply_default_layout(fig, height=380)
     fig.update_layout(xaxis=dict(tickmode="array", tickvals=YEARS))
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
     st.caption("Estimated EBITDA = Gross Revenue − Total Costs; not an audited P&L line.")
 
     # ---- Trajectory read-out: CAGR stat cards + a plain-language take on the
@@ -245,7 +245,7 @@ with tab2:
                   color_discrete_map=COMPANY_COLOR,
                   labels={"value": kpi_sel2, "scenario": "Scenario"})
     apply_default_layout(fig2, height=380)
-    st.plotly_chart(fig2, use_container_width=True)
+    st.plotly_chart(fig2, width="stretch")
     st.caption(
         f"{'Client counts are the modeled level at end of 2029 under each scenario.' if is_stock else 'Revenue/cost/volume figures are cumulative totals over 2025-2029 under each scenario.'}"
     )
@@ -275,7 +275,7 @@ with tab3:
                   labels={"value": "Expense", "year": "Year", "kpi": "Category"})
     apply_default_layout(fig3, height=380)
     fig3.update_layout(xaxis=dict(tickmode="array", tickvals=YEARS))
-    st.plotly_chart(fig3, use_container_width=True)
+    st.plotly_chart(fig3, width="stretch")
 
     total_cost_last = kpi_value(yearly, cost_company, "Total Costs", YEARS[-1])
     total_cost_first = kpi_value(yearly, cost_company, "Total Costs", YEARS[0])
@@ -317,14 +317,14 @@ with tab4:
                        labels={"value": "Clients", "year": "Year", "kpi": ""})
         apply_default_layout(fig4, title="Client growth", height=340)
         fig4.update_layout(xaxis=dict(tickmode="array", tickvals=YEARS))
-        st.plotly_chart(fig4, use_container_width=True)
+        st.plotly_chart(fig4, width="stretch")
     with col2:
         df5 = yearly[(yearly["company"] == cv_company) & (yearly["kpi"] == "Volume Processed")]
         fig5 = px.bar(df5, x="year", y="value", labels={"value": "Volume", "year": "Year"})
         fig5.update_traces(marker_color=COMPANY_COLOR[cv_company])
         apply_default_layout(fig5, title="Volume processed", height=340)
         fig5.update_layout(xaxis=dict(tickmode="array", tickvals=YEARS))
-        st.plotly_chart(fig5, use_container_width=True)
+        st.plotly_chart(fig5, width="stretch")
 
     retail_first = kpi_value(yearly, cv_company, "Retail Clients (EoP)", YEARS[0])
     retail_last = kpi_value(yearly, cv_company, "Retail Clients (EoP)", YEARS[-1])
@@ -379,7 +379,7 @@ with tab_pva:
     apply_default_layout(fig_pva, title="Realized revenue, indexed to plan = 100", height=360)
     top = max(100, pva["actual_to_plan"].max() * 100)
     fig_pva.update_layout(barmode="group", yaxis=dict(range=[0, top * 1.2]))  # room for the labels
-    st.plotly_chart(fig_pva, use_container_width=True)
+    st.plotly_chart(fig_pva, width="stretch")
 
     lo, hi = pva["actual_to_plan"].min(), pva["actual_to_plan"].max()
     kpi_grid([
@@ -408,9 +408,9 @@ with tab5:
     data_company = st.selectbox("Company", COMPANIES, key="data_company")
     st.markdown(f"**{YEARS[0]}-{YEARS[-1]} base forecast**")
     yearly_pivot = yearly[yearly["company"] == data_company].pivot(index="kpi", columns="year", values="value")
-    st.dataframe(yearly_pivot.style.format("{:,.0f}"), use_container_width=True)
+    st.dataframe(yearly_pivot.style.format("{:,.0f}"), width="stretch")
 
     st.markdown("**5-year scenarios**")
     scenario_pivot = scenario[scenario["company"] == data_company].pivot(index="kpi", columns="scenario", values="value")
     scenario_pivot = scenario_pivot[SCENARIOS]
-    st.dataframe(scenario_pivot.style.format("{:,.0f}"), use_container_width=True)
+    st.dataframe(scenario_pivot.style.format("{:,.0f}"), width="stretch")
