@@ -62,10 +62,12 @@ instant after that.
   snapshot, in US$. Below it, a synthetic transaction-level history
   (USDT, BTC and a fictional platform token, PFT) calibrated to that
   snapshot, with year-over-year comparison and status analysis.
-- **Financial Projections** — revenue, cost and client-growth projections
-  through 2029 across 3 scenarios (Conservative/Pessimistic/Optimistic), for
-  the group's two companies, plus a first plan-vs-actual check. **Not
-  synthetic** — see the disclaimer below.
+- **Financial Projections** — 2025-2029 projections for the group's two
+  companies, read analytically rather than just charted: the range of
+  outcomes across 3 scenarios (Conservative/Pessimistic/Optimistic), indexed
+  growth trajectories, operating leverage and the break-even year, where
+  growth comes from (more clients vs. more per client), and a plan-vs-actual
+  check against realized revenue. **Not synthetic** — see the disclaimer below.
 
 > **A second disclaimer, specific to this one:** the Financial Projections
 > dashboard is real data, mathematically masked — derived from real

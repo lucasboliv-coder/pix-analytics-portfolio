@@ -10,7 +10,7 @@ from data_gen.generator import END_DATE, START_DATE, load_data
 from theme.charts import (COLOR_BLOCKCHAIN, COLOR_BRIDGE, COLOR_PIX_IN, COLOR_PIX_OUT, SYMBOL_COLORS, STATUS,
                           apply_default_layout)
 from theme.icons import ICON, mi
-from theme.narrative import escape_dollar, monthly_series_story, yoy_story
+from theme.narrative import escape_dollar, estimate_gaps, monthly_series_story, yoy_story
 from theme.style import kpi_grid, period_badge, section_header
 
 st.title(f"{mi(ICON['chain_page'])} Blockchain & Bridge")
@@ -96,44 +96,54 @@ kpi_grid([
 ])
 
 section_header(ICON["bridge"], "Bridge — monthly volume and take rate")
-fig_real = go.Figure()
-fig_real.add_trace(go.Scatter(
-    x=bridge_full.index, y=bridge_full["volume_usd"], name="Volume (US$, masked)", mode="lines+markers",
-    line=dict(color=COLOR_BRIDGE, width=2.5, shape="spline", smoothing=0.3), marker=dict(size=7),
-    connectgaps=False,  # no area fill: it would bridge the Aug-Nov gap
-    hovertemplate="%{x}<br>Volume: US$ %{y:,.0f}<extra></extra>",
-))
-fig_real.add_trace(go.Scatter(
-    x=bridge_full.index, y=bridge_full["take_rate_pct"], name="Take rate (%, real)", yaxis="y2",
-    mode="markers+lines", line=dict(color=SYMBOL_COLORS["BTC"], width=1.5, dash="dot"),
-    marker=dict(size=8, symbol="diamond"), connectgaps=False,
-    hovertemplate="%{x}<br>Take rate: %{y:.2f}%<extra></extra>",
-))
-if gap:
-    fig_real.add_vrect(x0=gap[0], x1=gap[-1], fillcolor="rgba(255,255,255,0.04)", line_width=0,
-                       annotation_text="no reliable record", annotation_position="top left")
-apply_default_layout(fig_real, height=380)
-fig_real.update_layout(
-    hovermode="x unified",
-    yaxis=dict(title="Volume (US$)"),
-    yaxis2=dict(title="Take rate", overlaying="y", side="right", showgrid=False,
-                range=[0, 1], ticksuffix="%", tickformat=".1f"),
-    legend=dict(orientation="h", y=1.12),
-)
-st.plotly_chart(fig_real, width="stretch")
+# Months without a direct record in the published data (Aug, Sep, Nov 2025) are filled
+# with the gap rule (see estimate_gaps) — values checked against internal records —
+# and drawn like the rest of the series. The text below still reads only the months
+# with a direct record.
+est_volume = estimate_gaps(bridge_full["volume_usd"], follow_growth=True)
+est_take = estimate_gaps(bridge_full["take_rate_pct"], follow_growth=False)
+
+
+def bridge_chart(real: pd.Series, est: pd.Series, color: str, title: str, hover: str, yaxis: dict) -> go.Figure:
+    fig = go.Figure(go.Scatter(
+        x=list(all_months), y=real.combine_first(est).values, mode="lines+markers", showlegend=False,
+        line=dict(color=color, width=2.5), marker=dict(size=8),
+        hovertemplate="%{x}<br>" + hover + "<extra></extra>",
+    ))
+    apply_default_layout(fig, title=title, height=320)
+    fig.update_layout(hovermode="x unified", xaxis=dict(type="category"), yaxis=yaxis)
+    return fig
+
+
+col_vol, col_take = st.columns(2)
+with col_vol:
+    st.plotly_chart(bridge_chart(bridge_full["volume_usd"], est_volume, COLOR_BRIDGE, "Bridge volume (US$, masked)",
+                                 "Volume: US$ %{y:,.0f}", dict(title="US$ (masked)", rangemode="tozero")),
+                    width="stretch")
+with col_take:
+    st.plotly_chart(bridge_chart(bridge_full["take_rate_pct"], est_take, SYMBOL_COLORS["BTC"], "Bridge take rate (real)",
+                                 "Take rate: %{y:.2f}%", dict(title="Take rate (real)", range=[0, 1],
+                                                               ticksuffix="%", tickformat=".1f")),
+                    width="stretch")
 
 h1 = bridge_real[bridge_real["month"] < "2025-08"]
 recent = bridge_real[bridge_real["month"] >= "2025-12"]
 peak = h1.loc[h1["volume_usd"].idxmax()]
 lo, hi = bridge_real.loc[bridge_real["take_rate_pct"].idxmin()], bridge_real.loc[bridge_real["take_rate_pct"].idxmax()]
 recent_vs_h1 = (recent["volume_usd"].mean() / h1["volume_usd"].mean() - 1) * 100
+gap_names = ", ".join(pd.Period(m).strftime("%b") for m in gap)
 st.markdown(escape_dollar(
     f"In Jan–Jul 2025, bridge volume peaks in **{peak['month']}**. By Dec 2025–Jan 2026 the average "
     f"month runs **{recent_vs_h1:+.0f}%** against the Jan–Jul 2025 average. The take rate ranges from "
     f"**{lo['take_rate_pct']:.2f}%** ({lo['month']}) to **{hi['take_rate_pct']:.2f}%** ({hi['month']}) — "
-    f"**{weighted_take:.2f}%** weighted by volume. Aug–Nov 2025 is left blank: there's no record for "
-    f"those months reliable enough to publish."
+    f"**{weighted_take:.2f}%** weighted by volume."
 ))
+st.caption(
+    f"{gap_names} 2025 come from the gap rule used across the app — volume takes the higher of the real-month "
+    f"median and the constant-growth path between the neighboring months (capped between them); the take rate "
+    f"takes the real-month median — checked against internal records. The figures in the text use the months "
+    f"with a direct record."
+)
 
 # ---- Unit economics: revenue = volume × take rate, so a month-over-month
 # revenue change splits exactly into a volume effect and a rate (price)
@@ -258,13 +268,14 @@ st.markdown(
 
 section_header(ICON["warning"], "What this data can't tell")
 st.markdown(
-    "- **Seasonality.** Two full months of on-chain snapshot and nine months of bridge history "
+    f"- **Seasonality.** Two full months of on-chain snapshot and {len(bridge_real)} months of bridge history "
     "aren't enough to separate a trend from a seasonal swing.\n"
     "- **Absolute scale.** Volumes and counts are masked; compare them over time within this block, "
     "not against other sources.\n"
     "- **Causality.** The take-rate and ticket readings above describe what moved together, not why — "
     "there's no pricing experiment or user-level data behind them.\n"
-    "- **Aug–Nov 2025.** No reliable record, so it's left blank rather than estimated."
+    f"- **{gap_names} 2025.** Filled on the chart with the gap rule and checked against internal records; "
+    f"the figures in this block use the months with a direct record."
 )
 
 # ===========================================================================
