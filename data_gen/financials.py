@@ -15,6 +15,14 @@ before anything here is published:
    come from independently rounding each output value, not from the masking
    itself. The absolute dollar/count values below are not the real ones.
 
+Corrections (2026-09-30), applied to the masked figures as ratios:
+- 2025 is now the full year for every flow KPI (volume, revenue, costs,
+  expense lines); it previously covered ~9 months, which overstated
+  2025->2026 growth. 2025 client counts are unchanged.
+- PixFlow's boleto revenue and volume had been carried in BRL instead of
+  US$ in the source model; they're now converted at each year's average
+  FX quote.
+
 The numbers below are the masked output — there is no way to recover the
 original figures from them.
 """
@@ -50,21 +58,21 @@ _YEARLY = {
     "PixFlow": {
         "Retail Clients (EoP)": [3930, 48200, 55800, 52600, 49900],
         "Institutional Clients (EoP)": [225, 1670, 3610, 5620, 8450],
-        "Volume Processed": [62_280_000, 134_320_000, 194_120_000, 262_830_000, 335_360_000],
-        "Gross Revenue": [225000, 638000, 1_090_000, 1_470_000, 1_920_000],
-        "Total Costs": [517000, 700000, 730000, 762000, 794000],
-        "Customer Support Expenses": [55000, 75800, 79100, 82500, 86000],
+        "Volume Processed": [79_800_000, 131_000_000, 190_000_000, 259_000_000, 331_000_000],
+        "Gross Revenue": [246000, 581000, 1_030_000, 1_410_000, 1_860_000],
+        "Total Costs": [688000, 700000, 730000, 762000, 794000],
+        "Customer Support Expenses": [73500, 75800, 79100, 82500, 86000],
     },
     "NovaPay Finance": {
         "Retail Clients (EoP)": [176000, 509000, 886000, 1_310_000, 1_740_000],
         "Institutional Clients (EoP)": [148, 1100, 2370, 3700, 5560],
-        "Volume Processed": [1_178_400_000, 1_617_250_000, 1_690_390_000, 1_763_530_000, 1_836_680_000],
-        "Gross Revenue": [9_220_000, 12_750_000, 13_300_000, 13_860_000, 14_470_000],
-        "Total Costs": [4_970_000, 6_670_000, 6_770_000, 6_870_000, 6_970_000],
-        "People Expenses": [371000, 811000, 828000, 846000, 864000],
-        "Sales & Marketing Expenses": [161000, 73100, 73100, 73100, 73100],
-        "Operations Expenses": [1_100_000, 1_410_000, 1_430_000, 1_430_000, 1_430_000],
-        "IT Expenses": [140000, 206000, 208000, 208000, 208000],
+        "Volume Processed": [1_570_000_000, 1_620_000_000, 1_690_000_000, 1_760_000_000, 1_840_000_000],
+        "Gross Revenue": [12_300_000, 12_800_000, 13_300_000, 13_900_000, 14_500_000],
+        "Total Costs": [6_620_000, 6_670_000, 6_770_000, 6_870_000, 6_970_000],
+        "People Expenses": [571000, 811000, 828000, 846000, 864000],
+        "Sales & Marketing Expenses": [211000, 73100, 73100, 73100, 73100],
+        "Operations Expenses": [1_500_000, 1_410_000, 1_430_000, 1_430_000, 1_430_000],
+        "IT Expenses": [194000, 206000, 208000, 208000, 208000],
     },
 }
 
@@ -72,8 +80,8 @@ _SCENARIO = {
     "PixFlow": {
         "Retail Clients (EoP)": {"Conservative": 252000, "Pessimistic": 103000, "Optimistic": 658000},
         "Institutional Clients (EoP)": {"Conservative": 19700, "Pessimistic": 8090, "Optimistic": 51500},
-        "Volume Processed": {"Conservative": 1_009_910_000, "Pessimistic": 210_680_000, "Optimistic": 1_346_870_000},
-        "Gross Revenue": {"Conservative": 5_420_000, "Pessimistic": 2_220_000, "Optimistic": 5_800_000},
+        "Volume Processed": {"Conservative": 990_000_000, "Pessimistic": 203_000_000, "Optimistic": 1_300_000_000},
+        "Gross Revenue": {"Conservative": 5_120_000, "Pessimistic": 2_100_000, "Optimistic": 5_020_000},
         "Total Costs": {"Conservative": 3_670_000, "Pessimistic": 1_510_000, "Optimistic": 3_930_000},
         "Customer Support Expenses": {"Conservative": 397000, "Pessimistic": 163000, "Optimistic": 794000},
     },

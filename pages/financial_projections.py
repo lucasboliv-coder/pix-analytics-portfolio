@@ -92,7 +92,9 @@ def trend_stats(sub: pd.DataFrame) -> dict:
         "first_year": first_year, "last_year": last_year, "first": first, "last": last,
         "peak_year": years[peak_i], "peak_value": values[peak_i], "peak_is_last": peak_i == len(values) - 1,
         "total_growth": total_growth, "cagr": cagr, "valid_growth": valid_growth,
-        "accelerating": len(yoy) >= 2 and yoy.iloc[-1] > yoy.iloc[0],
+        # Less than a point between the first and last year's growth reads as
+        # steady, not accelerating — otherwise a flat ~4%/yr path gets called "building".
+        "accelerating": len(yoy) >= 2 and yoy.iloc[-1] - yoy.iloc[0] >= 1.0,
     }
 
 
@@ -256,10 +258,25 @@ with tab2:
         opt = df2[(df2["company"] == company) & (df2["scenario"] == "Optimistic")]["value"]
         if len(cons) and len(opt) and cons.iloc[0] > 0:
             multiple = opt.iloc[0] / cons.iloc[0]
-            st.markdown(escape_dollar(
-                f"**{company}**: the Optimistic case runs **{multiple:.1f}×** the Conservative one "
-                f"({fmt_kpi(opt.iloc[0], kpi_sel2)} vs. {fmt_kpi(cons.iloc[0], kpi_sel2)})."
-            ))
+            pair = f"({fmt_kpi(opt.iloc[0], kpi_sel2)} vs. {fmt_kpi(cons.iloc[0], kpi_sel2)})"
+            if multiple >= 1.1:
+                line = f"**{company}**: the Optimistic case runs **{multiple:.1f}×** the Conservative one {pair}."
+            else:
+                # Near-equal or inverted: say so, and point to where the Optimistic
+                # case's upside actually shows up instead of printing "1.0×".
+                comp = scenario[scenario["company"] == company]
+                vol = comp[comp["kpi"] == "Volume Processed"].set_index("scenario")["value"]
+                vol_multiple = vol["Optimistic"] / vol["Conservative"] if len(vol) == 3 else None
+                line = (
+                    f"**{company}**: on {kpi_sel2.lower()}, the Optimistic and Conservative cases land within "
+                    f"**{abs(multiple - 1) * 100:.0f}%** of each other {pair}."
+                )
+                if vol_multiple and vol_multiple >= 1.1 and kpi_sel2 != "Volume Processed":
+                    line += (
+                        f" The Optimistic case still processes **{vol_multiple:.1f}×** the volume — its upside "
+                        f"shows up in scale, at lower revenue per dollar processed, rather than in this line."
+                    )
+            st.markdown(escape_dollar(line))
     st.markdown(
         "**Note:** that entire spread is modeled on organic growth alone — paid acquisition is a lever "
         "still on the table, not one already tested and priced into the Optimistic case."
