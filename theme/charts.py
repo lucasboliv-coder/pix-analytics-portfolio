@@ -55,15 +55,20 @@ STATUS = {
     "FAILED": "#d03b3b",
 }
 
-# Financial Projections page: one color per company, and the scenario colors
-# reuse the status semantics (green=upside, yellow=base, red=downside).
+# Financial Projections page: one color per company. Scenarios are ordered
+# around a base case, so they take a diverging scheme — warm downside, neutral
+# base, cool upside — rather than status colors, which stay reserved for
+# status. Trio validated with the dataviz validator on the dark surface
+# (all-pairs CVD ΔE 11.3, normal-vision 16.7, contrast >= 3:1; the neutral's
+# low chroma is intended).
 COLOR_COMPANY_A = CATEGORICAL["blue"]
 COLOR_COMPANY_B = CATEGORICAL["violet"]
 SCENARIO_COLORS = {
-    "Optimistic": STATUS["CONFIRMED"],
-    "Conservative": STATUS["PENDING"],
-    "Pessimistic": STATUS["FAILED"],
+    "Pessimistic": CATEGORICAL["orange"],
+    "Conservative": INK_MUTED,
+    "Optimistic": CATEGORICAL["blue"],
 }
+SCENARIO_SYMBOLS = {"Pessimistic": "triangle-down", "Conservative": "circle", "Optimistic": "triangle-up"}
 
 # Sequential ramp (single hue, light -> dark) for table heatmaps
 SEQUENTIAL_BLUE = ["#cde2fb", "#86b6ef", "#3987e5", "#1c5cab", "#0d366b"]

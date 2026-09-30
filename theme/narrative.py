@@ -106,6 +106,37 @@ def monthly_series_story(
     return escape_dollar(sentence), total_growth
 
 
+def estimate_gaps(values: pd.Series, follow_growth: bool = True) -> pd.Series:
+    """Estimates the missing months of a monthly series (NaN = no reliable record).
+
+    Rule, for each missing month: the higher of (a) the median of the real
+    months and (b) the value on the growth path between the nearest real month
+    before and after it (constant-rate, i.e. geometric, interpolation) — then
+    capped between those two neighbors so an estimate never spikes past them.
+    With follow_growth=False (rates, shares) the estimate is just the median.
+
+    Returns a series with estimates at the missing positions and NaN elsewhere,
+    so callers can plot and label estimates apart from real data and keep them
+    out of every calculation.
+    """
+    median = values.dropna().median()
+    est = pd.Series(float("nan"), index=values.index)
+    vals = values.tolist()
+    for i, v in enumerate(vals):
+        if not pd.isna(v):
+            continue
+        prev = next((j for j in range(i - 1, -1, -1) if not pd.isna(vals[j])), None)
+        nxt = next((j for j in range(i + 1, len(vals)) if not pd.isna(vals[j])), None)
+        if not follow_growth or prev is None or nxt is None:
+            est.iloc[i] = median
+            continue
+        a, b = vals[prev], vals[nxt]
+        t = (i - prev) / (nxt - prev)
+        path = a * (b / a) ** t if a > 0 and b > 0 else a + (b - a) * t
+        est.iloc[i] = min(max(median, path), max(a, b))
+    return est
+
+
 def escape_dollar(text: str) -> str:
     """Escapes a literal '$' (e.g. from an "R$ 1,234" currency string) so
     st.markdown() doesn't read a pair of them as inline LaTeX and swallow
