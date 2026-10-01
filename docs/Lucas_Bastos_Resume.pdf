@@ -1,105 +1,892 @@
-%PDF-1.4
-%“Œ‹ž ReportLab Generated PDF document (opensource)
+%PDF-1.3
+%âãÏÓ
 1 0 obj
 <<
-/F1 2 0 R /F2 3 0 R /F3 4 0 R /F4 5 0 R
+/PageMode /UseNone
+/Pages 2 0 R
+/Type /Catalog
 >>
 endobj
 2 0 obj
 <<
-/BaseFont /Helvetica /Encoding /WinAnsiEncoding /Name /F1 /Subtype /Type1 /Type /Font
+/Count 2
+/Kids [ 3 0 R 15 0 R ]
+/Type /Pages
 >>
 endobj
 3 0 obj
 <<
-/BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding /Name /F2 /Subtype /Type1 /Type /Font
+/Contents 4 0 R
+/MediaBox [ 0 0 612 792 ]
+/Parent 2 0 R
+/Resources <<
+/Font 5 0 R
+/ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>>
+/Rotate 0
+/Trans <<
+>>
+/Type /Page
+/Annots [ 10 0 R 11 0 R 12 0 R 13 0 R 14 0 R ]
 >>
 endobj
 4 0 obj
 <<
-/BaseFont /ZapfDingbats /Name /F3 /Subtype /Type1 /Type /Font
+/Length 9647
 >>
+stream
+1 0 0 1 0 0 cm
+BT
+/F1 12 Tf
+14.4 TL
+ET
+q
+1 0 0 1 50.64 722.4 cm
+q
+0.101961 0.101961 0.101961 rg
+BT
+1 0 0 1 0 2 Tm
+/F2 22 Tf
+24 TL
+(LUCAS BASTOS) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 50.64 706.4 cm
+q
+BT
+1 0 0 1 0 2.5 Tm
+15 TL
+/F2 12.5 Tf
+0.121569 0.305882 0.47451 rg
+(Data Analyst \174 ETL\054 Data Modeling \046 Revenue Analytics) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 50.64 677.4 cm
+q
+BT
+1 0 0 1 0 16.7 Tm
+13 TL
+/F1 9.3 Tf
+0.101961 0.101961 0.101961 rg
+(Florian\363polis\054 Santa Catarina\054 Brazil \050Remote \226 GMT\0553\051  ) Tj
+(\174) Tj
+(  \05355 48 98449\0557572  ) Tj
+(\174) Tj
+(  lucasboliv\100gmail\056com) Tj
+T*
+(linkedin\056com\057in\057lucas\055bastos\05556756084  ) Tj
+(\174) Tj
+(  github\056com\057lucasboliv\055coder) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 50.64 653.4 cm
+q
+0.121569 0.305882 0.47451 rg
+BT
+1 0 0 1 0 2.5 Tm
+/F2 11.5 Tf
+14 TL
+(PROFESSIONAL SUMMARY) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 50.64 648.5 cm
+q
+0.9 w
+1 J
+0.121569 0.305882 0.47451 RG
+n
+0 0 m
+510.72 0 l
+S
+Q
+Q
+q
+1 0 0 1 50.64 576.5 cm
+q
+0.101961 0.101961 0.101961 rg
+BT
+1 0 0 1 0 56.4 Tm
+/F1 9.6 Tf
+13.2 TL
+(Data professional focused on turning data into business impact\056 Experience across fintech\054 education\054 manufacturing\054) Tj
+T*
+(and commercial operations\054 with a background in ETL\054 data modeling\054 business intelligence\054 KPI development\054) Tj
+T*
+(forecasting\054 and revenue analytics\056 Skilled at structuring data from multiple sources\054 improving process reliability\054 and) Tj
+T*
+(transforming operational and transactional data into decision\055ready insights\056 Strong interest in financial and transaction) Tj
+T*
+(data\054 with emphasis on data integrity\054 clarity\054 and measurable business value\056) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 50.64 572.5 cm
+Q
+q
+1 0 0 1 50.64 548.5 cm
+q
+0.121569 0.305882 0.47451 rg
+BT
+1 0 0 1 0 2.5 Tm
+/F2 11.5 Tf
+14 TL
+(PROJECTS) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 50.64 543.6 cm
+q
+0.9 w
+1 J
+0.121569 0.305882 0.47451 RG
+n
+0 0 m
+510.72 0 l
+S
+Q
+Q
+q
+1 0 0 1 50.64 511.6 cm
+q
+0.101961 0.101961 0.101961 RG
+n
+243.286 14.4125 m
+294.2298 14.4125 l
+S
+BT
+1 0 0 1 0 15.7 Tm
+13 TL
+/F2 10.3 Tf
+0.101961 0.101961 0.101961 rg
+(PixFlow Analytics \227 Personal portfolio project  ) Tj
+(\174) Tj
+(  ) Tj
+(Live demo) Tj
+(\072 pix\055analytics\055portfolio\056streamlit\056app  ) Tj
+(\174) Tj
+( ) Tj
+T*
+(github\056com\057lucasboliv\055coder\057pix\055analytics\055portfolio) Tj
+T*
+ET
+Q
+Q
+q
+0.122 0.306 0.475 rg
+BT
+/F3 6 Tf
+1 0.0 0.0 1 44.64 501.6 Tm
+<6c> Tj
+ET
+Q
+q
+0.102 0.102 0.102 rg
+BT
+/F1 9.6 Tf
+1 0.0 0.0 1 62.64 498 Tm
+<4275696c74206120342d64617368626f6172642053747265616d6c697420617070202855736572732026205469636b65742c20504958205472616465642c20426c6f636b636861696e2026204272696467652c2046696e616e6369616c2050726f6a656374696f6e732920666f722061> Tj
+ET
+Q
+q
+0.102 0.102 0.102 rg
+BT
+/F1 9.6 Tf
+1 0.0 0.0 1 62.64 485.2 Tm
+<5049582f63727970746f207061796d656e74732066696e746563682c2070616972696e67206d61736b6564207265616c206f7065726174696e672064617461207769746820612073796e746865746963207472616e73616374696f6e2d6c6576656c20686973746f72792e> Tj
+ET
+Q
+q
+0.122 0.306 0.475 rg
+BT
+/F3 6 Tf
+1 0.0 0.0 1 44.64 476 Tm
+<6c> Tj
+ET
+Q
+q
+0.102 0.102 0.102 rg
+BT
+/F1 9.6 Tf
+1 0.0 0.0 1 62.64 472.4 Tm
+<5075626c6973686564207265616c20636f6d70616e79206461746120736166656c793a206d6f6e74686c792061676772656761746573206f6e6c792c20636f756e747320616e64205553442076616c756573206d61736b6564206279206120646973636172646564> Tj
+ET
+Q
+q
+0.102 0.102 0.102 rg
+BT
+/F1 9.6 Tf
+1 0.0 0.0 1 62.64 459.6 Tm
+<72616e646f6d20666163746f722c207261746573206b657074207265616c2c20736f757263652066696c6573206b657074206f7574206f6620746865207265706f2e> Tj
+ET
+Q
+q
+0.122 0.306 0.475 rg
+BT
+/F3 6 Tf
+1 0.0 0.0 1 44.64 450.4 Tm
+<6c> Tj
+ET
+Q
+q
+0.102 0.102 0.102 rg
+BT
+/F1 9.6 Tf
+1 0.0 0.0 1 62.64 446.8 Tm
+<57656e74206265796f6e642063686172747320746f20616e616c797369733a207363656e6172696f2072616e6765732c206f7065726174696e67206c6576657261676520616e6420627265616b2d6576656e2c2067726f777468206465636f6d706f736974696f6e2c20616e642061> Tj
+ET
+Q
+q
+0.102 0.102 0.102 rg
+BT
+/F1 9.6 Tf
+1 0.0 0.0 1 62.64 434 Tm
+<706c616e2d76732d61637475616c20636865636b207468617420747261636564206120322e367820666f726563617374206d69737320746f206120766f6c756d6520617373756d7074696f6e2e> Tj
+ET
+Q
+q
+0.122 0.306 0.475 rg
+BT
+/F3 6 Tf
+1 0.0 0.0 1 44.64 424.8 Tm
+<6c> Tj
+ET
+Q
+q
+0.102 0.102 0.102 rg
+BT
+/F1 9.6 Tf
+1 0.0 0.0 1 62.64 421.2 Tm
+<4361756768742074776f206572726f727320696e2074686520736f757263652066696e616e6369616c206d6f64656c206265666f7265207075626c697368696e672e20537461636b3a20507974686f6e2c2053747265616d6c69742c20506c6f746c792c2070616e6461732e> Tj
+ET
+Q
+q
+1 0 0 1 50.64 410 cm
+Q
+q
+1 0 0 1 50.64 386 cm
+q
+0.121569 0.305882 0.47451 rg
+BT
+1 0 0 1 0 2.5 Tm
+/F2 11.5 Tf
+14 TL
+(CORE SKILLS) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 50.64 381.1 cm
+q
+0.9 w
+1 J
+0.121569 0.305882 0.47451 RG
+n
+0 0 m
+510.72 0 l
+S
+Q
+Q
+q
+1 0 0 1 50.64 335.5 cm
+q
+BT
+1 0 0 1 0 30 Tm
+13.2 TL
+/F1 9.6 Tf
+0.101961 0.101961 0.101961 rg
+(ETL \046 Data Pipelines \174 Data Modeling \174 Revenue Analytics \174 Financial \046 Transaction Data) Tj
+T*
+(SQL \174 Python \050Pandas\051 \174 PostgreSQL \174 Power BI \174 Streamlit \174 Excel) Tj
+T*
+(KPI Design \174 Forecasting \174 Dashboard Development \174 Business Intelligence \174 Process Improvement) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 50.64 331.5 cm
+Q
+q
+1 0 0 1 50.64 307.5 cm
+q
+0.121569 0.305882 0.47451 rg
+BT
+1 0 0 1 0 2.5 Tm
+/F2 11.5 Tf
+14 TL
+(PROFESSIONAL EXPERIENCE) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 50.64 302.6 cm
+q
+0.9 w
+1 J
+0.121569 0.305882 0.47451 RG
+n
+0 0 m
+510.72 0 l
+S
+Q
+Q
+q
+1 0 0 1 63 283.6 cm
+q
+0 0 0 rg
+BT
+/F1 10 Tf
+12 TL
+ET
+q
+1 0 0 1 0 0 cm
+q
+0.101961 0.101961 0.101961 rg
+BT
+1 0 0 1 0 2.7 Tm
+/F2 10.3 Tf
+13 TL
+(Data Analyst \174 Truther RezolvePay) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 367.2 0 cm
+q
+0.121569 0.305882 0.47451 rg
+BT
+1 0 0 1 0 3.2 Tm
+/F2 9.8 Tf
+13 TL
+32.1974 0 Td
+(Jun 2025 \055 Present) Tj
+T*
+-32.1974 0 Td
+ET
+Q
+Q
+q
+Q
+Q
+Q
+q
+1 0 0 1 50.64 271.6 cm
+q
+0.333333 0.333333 0.333333 rg
+BT
+1 0 0 1 0 3.2 Tm
+/F4 8.8 Tf
+12 TL
+(Remote) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 50.64 243 cm
+BT
+/F1 6 Tf
+7.2 TL
+ET
+0.121569 0.305882 0.47451 rg
+BT
+1 0 0 1 -6 19.6 Tm
+/F3 6 Tf
+7.2 TL
+(l) Tj
+/F1 6 Tf
+7.2 TL
+T*
+ET
+Q
+q
+1 0 0 1 62.64 243 cm
+q
+0.101961 0.101961 0.101961 rg
+BT
+1 0 0 1 0 16 Tm
+/F1 9.6 Tf
+12.8 TL
+-0.042353 Tw
+(Act as the first data professional in a crypto\055payment environment\054 helping structure the data function from the ground) Tj
+T*
+0 Tw
+(up\056) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 50.64 217.4 cm
+BT
+/F1 6 Tf
+7.2 TL
+ET
+0.121569 0.305882 0.47451 rg
+BT
+1 0 0 1 -6 19.6 Tm
+/F3 6 Tf
+7.2 TL
+(l) Tj
+/F1 6 Tf
+7.2 TL
+T*
+ET
+Q
+q
+1 0 0 1 62.64 217.4 cm
+q
+0.101961 0.101961 0.101961 rg
+BT
+1 0 0 1 0 16 Tm
+/F1 9.6 Tf
+12.8 TL
+-0.1116 Tw
+(Built ETL pipelines in Python for transactional data across crypto\054 PIX\054 and banking systems\054 loading curated datasets) Tj
+T*
+0 Tw
+(into PostgreSQL\057AWS environments\056) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 50.64 191.8 cm
+BT
+/F1 6 Tf
+7.2 TL
+ET
+0.121569 0.305882 0.47451 rg
+BT
+1 0 0 1 -6 19.6 Tm
+/F3 6 Tf
+7.2 TL
+(l) Tj
+/F1 6 Tf
+7.2 TL
+T*
+ET
+Q
+q
+1 0 0 1 62.64 191.8 cm
+q
+0.101961 0.101961 0.101961 rg
+BT
+1 0 0 1 0 16 Tm
+/F1 9.6 Tf
+12.8 TL
+(Modeled financial and transactional data to calculate revenue\054 fees\054 profitability\054 and product\055level performance) Tj
+T*
+(metrics\056) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 50.64 166.2 cm
+BT
+/F1 6 Tf
+7.2 TL
+ET
+0.121569 0.305882 0.47451 rg
+BT
+1 0 0 1 -6 19.6 Tm
+/F3 6 Tf
+7.2 TL
+(l) Tj
+/F1 6 Tf
+7.2 TL
+T*
+ET
+Q
+q
+1 0 0 1 62.64 166.2 cm
+q
+0.101961 0.101961 0.101961 rg
+BT
+1 0 0 1 0 16 Tm
+/F1 9.6 Tf
+12.8 TL
+(Developed interactive dashboards in Streamlit and automated reports to improve visibility into transactions\054 behavior\054) Tj
+T*
+(and business performance\056) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 50.64 140.6 cm
+BT
+/F1 6 Tf
+7.2 TL
+ET
+0.121569 0.305882 0.47451 rg
+BT
+1 0 0 1 -6 19.6 Tm
+/F3 6 Tf
+7.2 TL
+(l) Tj
+/F1 6 Tf
+7.2 TL
+T*
+ET
+Q
+q
+1 0 0 1 62.64 140.6 cm
+q
+0.101961 0.101961 0.101961 rg
+BT
+1 0 0 1 0 16 Tm
+/F1 9.6 Tf
+12.8 TL
+(Supported business and product decisions by identifying inconsistencies across databases and improving data) Tj
+T*
+(reliability\056) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 63 121.6 cm
+q
+0 0 0 rg
+BT
+/F1 10 Tf
+12 TL
+ET
+q
+1 0 0 1 0 0 cm
+q
+0.101961 0.101961 0.101961 rg
+BT
+1 0 0 1 0 2.7 Tm
+/F2 10.3 Tf
+13 TL
+(Data Analyst \174 Vitru Education) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 367.2 0 cm
+q
+0.121569 0.305882 0.47451 rg
+BT
+1 0 0 1 0 3.2 Tm
+/F2 9.8 Tf
+13 TL
+24.573 0 Td
+(Aug 2023 \055 Jun 2025) Tj
+T*
+-24.573 0 Td
+ET
+Q
+Q
+q
+Q
+Q
+Q
+q
+1 0 0 1 50.64 109.6 cm
+q
+0.333333 0.333333 0.333333 rg
+BT
+1 0 0 1 0 3.2 Tm
+/F4 8.8 Tf
+12 TL
+(Florian\363polis\054 Brazil \055 Hybrid) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 50.64 81 cm
+BT
+/F1 6 Tf
+7.2 TL
+ET
+0.121569 0.305882 0.47451 rg
+BT
+1 0 0 1 -6 19.6 Tm
+/F3 6 Tf
+7.2 TL
+(l) Tj
+/F1 6 Tf
+7.2 TL
+T*
+ET
+Q
+q
+1 0 0 1 62.64 81 cm
+q
+0.101961 0.101961 0.101961 rg
+BT
+1 0 0 1 0 16 Tm
+/F1 9.6 Tf
+12.8 TL
+(Managed KPI tracking\054 forecasting\054 and variance analysis to support planning\054 performance monitoring\054 and strategic) Tj
+T*
+(decision\055making\056) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 50.64 55.4 cm
+BT
+/F1 6 Tf
+7.2 TL
+ET
+0.121569 0.305882 0.47451 rg
+BT
+1 0 0 1 -6 19.6 Tm
+/F3 6 Tf
+7.2 TL
+(l) Tj
+/F1 6 Tf
+7.2 TL
+T*
+ET
+Q
+q
+1 0 0 1 62.64 55.4 cm
+q
+0.101961 0.101961 0.101961 rg
+BT
+1 0 0 1 0 16 Tm
+/F1 9.6 Tf
+12.8 TL
+(Collected\054 cleaned\054 and prepared data from multiple sources to compare actual versus planned performance across) Tj
+T*
+(indicators\056) Tj
+T*
+ET
+Q
+Q
+q
+1 0 0 1 50.64 42.6 cm
+BT
+/F1 6 Tf
+7.2 TL
+ET
+0.121569 0.305882 0.47451 rg
+BT
+1 0 0 1 -6 6.8 Tm
+/F3 6 Tf
+7.2 TL
+(l) Tj
+/F1 6 Tf
+7.2 TL
+T*
+ET
+Q
+q
+1 0 0 1 62.64 42.6 cm
+q
+0.101961 0.101961 0.101961 rg
+BT
+1 0 0 1 0 3.2 Tm
+/F1 9.6 Tf
+12.8 TL
+(Produced clear executive reports explaining significant variations and supporting business action plans\056) Tj
+T*
+ET
+Q
+Q
+
+endstream
 endobj
 5 0 obj
 <<
-/BaseFont /Helvetica-Oblique /Encoding /WinAnsiEncoding /Name /F4 /Subtype /Type1 /Type /Font
+/F1 6 0 R
+/F2 7 0 R
+/F3 8 0 R
+/F4 9 0 R
 >>
 endobj
 6 0 obj
 <<
-/Contents 11 0 R /MediaBox [ 0 0 612 792 ] /Parent 10 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
+/BaseFont /Helvetica
+/Encoding /WinAnsiEncoding
+/Name /F1
+/Subtype /Type1
+/Type /Font
 >>
 endobj
 7 0 obj
 <<
-/Contents 12 0 R /MediaBox [ 0 0 612 792 ] /Parent 10 0 R /Resources <<
-/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
->> /Rotate 0 /Trans <<
-
->> 
-  /Type /Page
+/BaseFont /Helvetica-Bold
+/Encoding /WinAnsiEncoding
+/Name /F2
+/Subtype /Type1
+/Type /Font
 >>
 endobj
 8 0 obj
 <<
-/PageMode /UseNone /Pages 10 0 R /Type /Catalog
+/BaseFont /ZapfDingbats
+/Name /F3
+/Subtype /Type1
+/Type /Font
 >>
 endobj
 9 0 obj
 <<
-/Author (Lucas Bastos) /CreationDate (D:20260918004124-03'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20260918004124-03'00') /Producer (ReportLab PDF Library - \(opensource\)) 
-  /Subject (\(unspecified\)) /Title (Lucas Bastos - Resume) /Trapped /False
+/BaseFont /Helvetica-Oblique
+/Encoding /WinAnsiEncoding
+/Name /F4
+/Subtype /Type1
+/Type /Font
 >>
 endobj
 10 0 obj
 <<
-/Count 2 /Kids [ 6 0 R 7 0 R ] /Type /Pages
+/Type /Annot
+/Subtype /Link
+/Rect [ 385 690.7 479.7 702.5 ]
+/Border [ 0 0 0 ]
+/A <<
+/S /URI
+/URI (mailto\072lucasboliv\100gmail\056com)
+>>
+/P 3 0 R
 >>
 endobj
 11 0 obj
 <<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 2921
+/Type /Annot
+/Subtype /Link
+/Rect [ 49.6 677.7 212.4 689.5 ]
+/Border [ 0 0 0 ]
+/A <<
+/S /URI
+/URI (https\072\057\057www\056linkedin\056com\057in\057lucas\055bastos\05556756084\057)
 >>
-stream
-Gb!#]D,]1[')nJ0d@[k;4'UpfP3r4T5fb!LZ8gLIh5fPY=;or#80dLm1,tO@J))o,"%/=&\ZUH4Cdt1k<kgcqFNX\(Ii\JH9E<A(E:Vida+`UnS?Xr+jV;#Ohu*GmWHS-H'oZS\\p,f#n:KcSc7Eqml)37J6"s)8!/aHH\-oGTmV:.%X3]t,$TL4R/?]k.@JL]js$>gr_V]u%m@ZZ7Z!ba&d>h!(kl=5WXAKY_nUh]]T']=O/m./UfI+XGn;\4l:*khmGl_:B`2b'F[?#%?@j*f#'AW'tQR+TF$5)D`q?<))Zhc\52:2bW7R78kQ=oi:a`9([+/_^bH0YW?QGt*j_LbA/mi7Tl6F%c).J?3KE'(Sg8Qp)CFkm%HrO<hm[r2;SY(Nq?"5ofc&*#+_VW72_2";s]_2c#6=h_bJG/%i+-=SK!'7Gk3G^q-Oj,oG1H6VF,hE>&I]L_XV+&)UJSrO=lDFC`]=8JLhr$XrHX$0ba?5m6)Gk'H8d/J6JruDb^o:,(?(Q68op$\e[Yk\.dj6=g<qMlXn;1prY#5<B8_b5=2r;&nJHP>lhgHs*;&B!L1Z2Q"^`-u@Mp_<>r\L;7qrE,ZQl3Gc=S#LMSo3A(.V6E_41?T7F&rKRYMW9LN$!F(..WZbQ.u5H\@:@!k6cPDL1??5;Q/\&dDWKc"#WtG''e"/0$'XHhpQl_?Rpg0D!L"+g@hZ"3JL@?D9&G/]HB2qK"tLJGD,a]u7NkK`Bk<GW`J,CmnCT]9)q&:'^WeDT_W6X(/E*mJcWmB*@i,sWAl:lo.E^oi[:!u%iYYD*$HNTT<dL7!f.'K;.H<a*0o%kC<QJ$E["h7tZjT)cdRU!_CaEOfm.EZ(#)-MA7l:q5h)mJW5A?lGU8?(+C\W^@JfHUFS4.d0bJe'tOKO:0;%>b&iWqqc-M.;%g7h@g2CagDb/QQc[O`4Tq7AhNDj8g6N1$]rLP3"H<,@7ah:R+qif[M/M1A-*,5.EtSK'XVMLN&p?hRJ"J*^SN*'Z#PS)E%8WPuDm]K6RE?$'<n7D#n2jgqd4ZU@;G#(QY-puA.(rTHH^%p/i"gX8IQ5(P^q\W3dC<Q,lm1o6$,Mhf7PoU=)VZ/Z[M8S\8'))C_9C6E/XLp8X63(ks^/XBsDKf,Ru%6Qk#6#rSfm?o^-iMA7i'/*=D6mLU-!$BA[Y)"$jX#+Edb^#7;$t??k;ouGAXY,1ZdH.%*CX9TCZn:W1T52bF&Jp7`j&*bcm4)Zs+ri;fDh/><&%@2;3P$3@aAR\8]GSN`nkZc[-eBYn5E""[0&/3MNLu:ALhMFnq7a\+\VU`HjP./'$Zgmo`s=t.#F'BEWdTU=Q*EJ\D5RMMKZWtofQ'ri$Uk88&?H3;&8EGMpk=MP&=Gm$`rpB9h\Y$Hp>O3IY;kA(E3gYa.'%KBVq&<bLVZ'40JBC<@6#cX%DEEQG9a,;BJ[5Wp<<u:TVM*1;n.#mVZkcbf.utr<=;0Q&M-j_g'auhkDKKV4:I9QE%8\+9i-S_gY1@tW]@WlRNTe#?/aJ8q5\L(Xj&S@:6Tu\Q7i-24_LcnB<sKlck!;Hq?HYL:Rc:42C"D)X*Tk_>[h\IC&^3M`mkPTC<'-47)T_/"t/#*;16DfOYO3Wi]cbf2e$L@U`^Sm,*l(eBpM(O6\MU>;mW?Y>+o:lKJ"),ID]oh9]\GM?[1)dB]fY=%`e\N]9f)QO/8>C^<busU-QHgF+l]n(/oug;@O5u,c8HjA=7!*IOj*tf-P>R*/X?Y?f,,(ij[+3X$5P'9c_D;54S/*^SYt2X_\s!@\!1`8VR?il]CO+jru%)cZ<p)+*Z7B&%cR]CPrs/\k\fiHeTT`n`^DT)ZO:/c*]Jb\Ss.FMiH`HL@h&f34m,4D-b*rrupHC.u\Gt+>fYHp(^ck\h:a5Rh/ghX-rQjVd#hsX/=iR[h5-RpUSao?=MHV4ZOjiDB%Jk5N`hAQP[E/?h>d[]>l5NJHtVM+mudF2%QBN9t&1'K0b\=8c?_\aY<*7a#:$rl*P*&8gH8$6h*efn+`F??SmTU&;&S"jH'S@>YLW$X+oe@c>58U*Qn]m+%g>tYh6_s",Q-2TG]oHfVnH,=`:j7[Wh96%m9f<;84hZ/,]m"RmBqJG[M3WC.L[fb7WC\aL:H?lhTbCHPi8^6cF)]+Me,\0P7&38II:Y#)54#.dd^MmK>H?H=d1^*bU-Roal^jEFoVV8qV&ndaPK>PLPo-[1['%=/&r4nqtM0UWmf6iAbrP^2B=:\n"N<C&/3H<mT#r.^!A'Ut[4P#[&m-VnJgM2faI/AJ$MIA_"u^h)R.Za1fo1S@6S1SGoeWHFoMJ4#?%7EU-)`A$e6R[si=9<P&AcLs9@!h']B2G=,JRU:ujqU?GA-BIUg:)9#R-+leHWDKnL#:P4<:MFN&C[LWH*oh5u:D3!(SC4=#E1I<@6e%DSmq']%MZN]\a95GboTIWc385=%Wo1oiXOUL1N1Ul^1&Uh%G>IG3EH9;7H`eb]Hom1.bS!s"24Aos9%$)s^N6KF+L?Sh^1C;?8[=?]C$/%0++Z=s1ISo++&<Dd7G"s(.`0f?,)-4LgGpHg3elP8Vr[k?._F=EpiW$d1gp,s:]S_61Q5_#U*YP]GM_tpE]<R-A3V<OH#R'M`V-inYDZp*oYEXih&o6dFR]Mr=7k68eZ4/,pF_lk)iLPGpF7:Yma2i@2oe)&,MBIN4-647fR?W#5#GrV8V'o6lLd7tpd'sZrqlZcEF-A:=[eFWqs,-SRXirMIE1Y'(%h[CV]b4t@^)1,8R@[Wsr-D)hI2[,THHTET8-a<Cj^i>"K(jFo@W8NU^Q=RCHq79;o[5ll8NG3ubPfh?nr9p*>aGqhoYr_sj:=@(Fd]E@3.F1\$N7,o`Yi6F(;j`PkC]1;lI\"_5eGamA@`?C_h!6pc$ob:):cP~>endstream
+/P 3 0 R
+>>
 endobj
 12 0 obj
 <<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 2384
+/Type /Annot
+/Subtype /Link
+/Rect [ 223.2 677.7 340.4 689.5 ]
+/Border [ 0 0 0 ]
+/A <<
+/S /URI
+/URI (https\072\057\057github\056com\057lucasboliv\055coder)
+>>
+/P 3 0 R
+>>
+endobj
+13 0 obj
+<<
+/Type /Annot
+/Subtype /Link
+/Rect [ 292.9 523.7 526.7 536.5 ]
+/Border [ 0 0 0 ]
+/A <<
+/S /URI
+/URI (https\072\057\057pix\055analytics\055portfolio\056streamlit\056app\057)
+>>
+/P 3 0 R
+>>
+endobj
+14 0 obj
+<<
+/Type /Annot
+/Subtype /Link
+/Rect [ 49.6 510.7 302.3 523.5 ]
+/Border [ 0 0 0 ]
+/A <<
+/S /URI
+/URI (https\072\057\057github\056com\057lucasboliv\055coder\057pix\055analytics\055portfolio)
+>>
+/P 3 0 R
+>>
+endobj
+15 0 obj
+<<
+/Contents 16 0 R
+/MediaBox [ 0 0 612 792 ]
+/Parent 2 0 R
+/Resources <<
+/Font 5 0 R
+/ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>>
+/Rotate 0
+/Trans <<
+>>
+/Type /Page
+>>
+endobj
+16 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ]
+/Length 2384
 >>
 stream
-Gb!#]>BeOU&:X)OR&AcGV_PpI[Vrh[JO0`9G@13@g57,ZV6"24_VrQ(8?s6`D:[guLCKb3WM@Z#Rr@GY;*8gf^Lr!c)8Oo6?G?!Go3jN^06BOJ?,>Xhkas*'*8,P,5mTj8F[e@NW15Qgj+iY%%X1%mlOV"n"E&]Go"bWf@G_0Tkjd1q]`E@f#A7YY7'O);EV]`KT-(-sqa3%9Z!knmhm2AdgtDA?!tTQ^\$sALEaK?9$$]PoQdAs/$_C"7?fX%u>X6#r0GanR8^7GD_IJDdMPajN;4`E-_rlV-+a`u#PtT45Kr#KUBp:-<(_mD0_27q<U.U!ZAJ+$XA3;k,LVuP#1X<t^CiEj,&2GE!I5aqm$5qeJTmAr$RUU6g66^rRlW#XKk,CMNEN![!pqWHOnNR&EmgLdg4tc+'B%as"G?--3oarR-7%1E7nqb.3*al*jp]9hO7O%q4kB-_QJq8)fD:0)"j?fN]@4`C5+'&UAU!k(f3+*N>n_8YJn+t*d3%YdA2Q2Su2$_\JIGD*OnpW82f1ZRr5M1D?CL.:AdQG_C)j2hl>n@Lf$(OTXSY^#TS+XI*nQpT8.u*$S@rJ$"H$8D:VECD62&m,OmoG4dm!ABW'J;W+SA=dWeHoK0MeHk#i^S<l'$_gb/?:J!jqFI\p74OdbK/'c\"p;:+:MS^T6)BXiQ16`erEX3D+tfqm?Y(=6V'Nc&<s_eQr#In)37ogEZl1378+"UQsq=4%=U$/MgIacaau(]r3`8\$-mLA:0onMZ"/t!`d*EJEDrFX@N$tT:O<uTJeM>X&,Ku5U!UA+VA!F2'eIT]8TR9>'=s!6WXO#CX[&D@iH;D1$CRC8F:HWL0FfVOnXcR.?e["=+$N+38pierE7jRVV!@=0p4X5k,V63n1!C7$JodAq4A3NmVhrK_eSpcuA/>+^DGeI\8I?2HQ0*:T(9r=eCB2k('`3VoUY>=!5g(f;Db2a`d/C6Ds69+Y>$&o;`7U-NHnOtpn9]2jrahfd#lISchifoiYr>#..g=Y_;WW48M_+UXj,QNQMLlfRGUq9Ld.\HqI*I"qjg6>Tcsg8U5a#5d9IEDJC-r.,9p)dkT1EK1`PB;$W9"fDfKtH>=dX..q@+/cZKbiGT$\$23@-GS4b`]ng>&WoC.i%7@+^0(FHjd[CV!&Ie#K-.A13:])E+^e#-7>kmsFdsf10CeWrQpmF$h:5Sk"C9W)QdOZ>ip9`>V@sMEJmg#9@/AbcZohK\8F-?e)-4A^7Te$*-(g>m$<a(+loWSq*Ut.V_jscM(ei<g6Yh;ELkk_at_PG7!;JJYF"!=-bLI9)+alRQR\;X.'$`U,dNbV#LH5Wb=@%%^!pVjn)6(KSu)2#FaEOK-4V)LLrln,ta(CnaBg0[(\=+d%aWTD9n-^V[''\%Q?`/*8)OCiQ1=UBO@Ug7M)^W=s@8[51.<)7'3sX7-6W@_)BOI#Q;QfgtJ-U27K9dX@YN+XXf\n\g+hP5!2A4>KoOkc*aCHYjZe`*-['UAP=Hg?e74@pJkmn#fa*AWU;<6&`Nl^Z;>H3C!BiddnlFcW9tj5EV18frfc?tGPZGoo(79W:M\'mH$+Br]=`YQPLj`Un7OXrh*&Ogm-\BYMP%W=B?$k$8)2>5:a94XW7+]Qdmo`6`h"tMQm/Z@VMcYCG4LA09=E?h/B&1$Y=b%=YrUh]?TM4DMNpW;`>G]B\?Zk>DIY?)QfSCQD[Q-M%$8&(Mr]2PMr'Vuc.-l(f/AWm_m/5B9'k-KFAo_-m]/YrhVCljX";19_8bJN!_^CQV.$E8>u3bW!f[FCf-q0dZiW?,35NE2>T(us^_]O]llgH\9F9lO71_O!&[dac("#VpdB0:AU-&<CUB3<1_TmS&iALpuRFRVU$-Ll*($g=:Z46s%r[*+Y+7"c#j(oH8[Wrf)T%MVhGl_\Z7]GfX#tTX$ok7"TMQ/nt*9<MCFEqkQIQEs'Iq[XoXIJBJ`!8@+J,&W+5riH09<LIK(KgFdg=eN%^RML&V(pu#_C]DtmDbqSk.:.MYrG7m5c54(42-,#4hl>@o;l3L,ks/.@DsDNmg:[\,,r;Na4A*Q.ha,ULmb:3mT<-/9=FYp((%BL3R,^M*q*EC97k.^(s?XNou"HqnONEp<,YU`XugZ;UZEln0_^Ql`MX<)BsrKgfFsY:VGCh?fUDK.qT]RXr!15+hP0cIU\9ar&G@2+>Y/I!hBnff"p,djY-5%+n/GW'IX$9fqYIM"cLO?3(;14D/DhIWS(a:FN">pCp!>GKXRh-`bY6c?,?0]I/DjOBq_XY(A=07`@4Lhi?2+*<YOaYr!+llR=MqN+/&IK:hon;s""(Q&.B(\Mf@TF@HM7J"6&fMlJ^6#mcES-?Km4J@)h5ZN^K-76dJ~>endstream
+Gb!#]>BeOU&:X)OR&AcGV_PpI[Vrh[JO0`9G@13@g57,ZV6"24_VrQ(8?s6`D:[guLCKb3WM@Z#Rr@GY;*8gf^Lr!c)8Oo6?G?!Go3jN^06BOJ?,>Xhkas*'*8,P,5mTj8F[e@NW15Qgj+iY%%X1%mlOV"n"E&]Go"bWf@G_0Tkjd1q]`E@f#A7YY7'O);EV]`KT-(-sqa3%9Z!knmhm2AdgtDA?!tTQ^\$sALEaK?9$$]PoQdAs/$_C"7?fX%u>X6#r0GanR8^7GD_IJDdMPajN;4`E-_rlV-+a`u#PtT45Kr#KUBp:-<(_mD0_27q<U.U!ZAJ+$XA3;k,LVuP#1X<t^CiEj,&2GE!I5aqm$5qeJTmAr$RUU6g66^rRlW#XKk,CMNEN![!pqWHOnNR&EmgLdg4tc+'B%as"G?--3oarR-7%1E7nqb.3*al*jp]9hO7O%q4kB-_QJq8)fD:0)"j?fN]@4`C5+'&UAU!k(f3+*N>n_8YJn+t*d3%YdA2Q2Su2$_\JIGD*OnpW82f1ZRr5M1D?CL.:AdQG_C)j2hl>n@Lf$(OTXSY^#TS+XI*nQpT8.u*$S@rJ$"H$8D:VECD62&m,OmoG4dm!ABW'J;W+SA=dWeHoK0MeHk#i^S<l'$_gb/?:J!jqFI\p74OdbK/'c\"p;:+:MS^T6)BXiQ16`erEX3D+tfqm?Y(=6V'Nc&<s_eQr#In)37ogEZl1378+"UQsq=4%=U$/MgIacaau(]r3`8\$-mLA:0onMZ"/t!`d*EJEDrFX@N$tT:O<uTJeM>X&,Ku5U!UA+VA!F2'eIT]8TR9>'=s!6WXO#CX[&D@iH;D1$CRC8F:HWL0FfVOnXcR.?e["=+$N+38pierE7jRVV!@=0p4X5k,V63n1!C7$JodAq4A3NmVhrK_eSpcuA/>+^DGeI\8I?2HQ0*:T(9r=eCB2k('`3VoUY>=!5g(f;Db2a`d/C6Ds69+Y>$&o;`7U-NHnOtpn9]2jrahfd#lISchifoiYr>#..g=Y_;WW48M_+UXj,QNQMLlfRGUq9Ld.\HqI*I"qjg6>Tcsg8U5a#5d9IEDJC-r.,9p)dkT1EK1`PB;$W9"fDfKtH>=dX..q@+/cZKbiGT$\$23@-GS4b`]ng>&WoC.i%7@+^0(FHjd[CV!&Ie#K-.A13:])E+^e#-7>kmsFdsf10CeWrQpmF$h:5Sk"C9W)QdOZ>ip9`>V@sMEJmg#9@/AbcZohK\8F-?e)-4A^7Te$*-(g>m$<a(+loWSq*Ut.V_jscM(ei<g6Yh;ELkk_at_PG7!;JJYF"!=-bLI9)+alRQR\;X.'$`U,dNbV#LH5Wb=@%%^!pVjn)6(KSu)2#FaEOK-4V)LLrln,ta(CnaBg0[(\=+d%aWTD9n-^V[''\%Q?`/*8)OCiQ1=UBO@Ug7M)^W=s@8[51.<)7'3sX7-6W@_)BOI#Q;QfgtJ-U27K9dX@YN+XXf\n\g+hP5!2A4>KoOkc*aCHYjZe`*-['UAP=Hg?e74@pJkmn#fa*AWU;<6&`Nl^Z;>H3C!BiddnlFcW9tj5EV18frfc?tGPZGoo(79W:M\'mH$+Br]=`YQPLj`Un7OXrh*&Ogm-\BYMP%W=B?$k$8)2>5:a94XW7+]Qdmo`6`h"tMQm/Z@VMcYCG4LA09=E?h/B&1$Y=b%=YrUh]?TM4DMNpW;`>G]B\?Zk>DIY?)QfSCQD[Q-M%$8&(Mr]2PMr'Vuc.-l(f/AWm_m/5B9'k-KFAo_-m]/YrhVCljX";19_8bJN!_^CQV.$E8>u3bW!f[FCf-q0dZiW?,35NE2>T(us^_]O]llgH\9F9lO71_O!&[dac("#VpdB0:AU-&<CUB3<1_TmS&iALpuRFRVU$-Ll*($g=:Z46s%r[*+Y+7"c#j(oH8[Wrf)T%MVhGl_\Z7]GfX#tTX$ok7"TMQ/nt*9<MCFEqkQIQEs'Iq[XoXIJBJ`!8@+J,&W+5riH09<LIK(KgFdg=eN%^RML&V(pu#_C]DtmDbqSk.:.MYrG7m5c54(42-,#4hl>@o;l3L,ks/.@DsDNmg:[\,,r;Na4A*Q.ha,ULmb:3mT<-/9=FYp((%BL3R,^M*q*EC97k.^(s?XNou"HqnONEp<,YU`XugZ;UZEln0_^Ql`MX<)BsrKgfFsY:VGCh?fUDK.qT]RXr!15+hP0cIU\9ar&G@2+>Y/I!hBnff"p,djY-5%+n/GW'IX$9fqYIM"cLO?3(;14D/DhIWS(a:FN">pCp!>GKXRh-`bY6c?,?0]I/DjOBq_XY(A=07`@4Lhi?2+*<YOaYr!+llR=MqN+/&IK:hon;s""(Q&.B(\Mf@TF@HM7J"6&fMlJ^6#mcES-?Km4J@)h5ZN^K-76dJ~>
+endstream
+endobj
+17 0 obj
+<<
+/Author (Lucas Bastos)
+/CreationDate (D\07220260918004124\05503\04700\047)
+/Creator (\050unspecified\051)
+/Keywords ()
+/ModDate (D\07220260918004124\05503\04700\047)
+/Producer (ReportLab PDF Library \055 \050opensource\051)
+/Subject (\050unspecified\051)
+/Title (Lucas Bastos \055 Resume)
+/Trapped /False
+>>
 endobj
 xref
-0 13
+0 18
 0000000000 65535 f 
-0000000061 00000 n 
-0000000122 00000 n 
-0000000229 00000 n 
-0000000341 00000 n 
-0000000424 00000 n 
-0000000539 00000 n 
-0000000734 00000 n 
-0000000929 00000 n 
-0000000998 00000 n 
-0000001285 00000 n 
-0000001351 00000 n 
-0000004364 00000 n 
+0000000015 00000 n 
+0000000083 00000 n 
+0000000149 00000 n 
+0000000385 00000 n 
+0000010084 00000 n 
+0000010145 00000 n 
+0000010252 00000 n 
+0000010364 00000 n 
+0000010447 00000 n 
+0000010562 00000 n 
+0000010732 00000 n 
+0000010947 00000 n 
+0000011136 00000 n 
+0000011342 00000 n 
+0000011563 00000 n 
+0000011754 00000 n 
+0000014231 00000 n 
 trailer
 <<
-/ID 
-[<127962ad9d7ba6e43fb02b2c2607b48b><127962ad9d7ba6e43fb02b2c2607b48b>]
-% ReportLab generated PDF document -- digest (opensource)
-
-/Info 9 0 R
-/Root 8 0 R
-/Size 13
+/Size 18
+/Root 1 0 R
+/Info 17 0 R
+/ID [ <127962ad9d7ba6e43fb02b2c2607b48b> <127962ad9d7ba6e43fb02b2c2607b48b> ]
 >>
 startxref
-6840
+14558
 %%EOF
