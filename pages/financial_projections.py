@@ -410,7 +410,10 @@ with tab2:
             fig.update_layout(
                 xaxis=dict(range=[0, x_max], title="Index, Conservative = 100"),
                 yaxis=dict(autorange="reversed"),
-                legend=dict(orientation="h", y=-0.22), margin=dict(l=10, r=10, t=50, b=60),
+                # Legend anchored by its top edge well below the axis title, with room reserved
+                # in the bottom margin, so the two never overlap at any width.
+                legend=dict(orientation="h", yanchor="top", y=-0.3, xanchor="center", x=0.5),
+                margin=dict(l=10, r=10, t=50, b=100), height=390,
             )
             st.plotly_chart(fig, width="stretch")
 
